@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "66ca7343889332c2b8ecca11c251430c",
+    "content-hash": "8aab67802c0e9ce7a9b3edee332e9f5a",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -367,6 +367,65 @@
             "time": "2018-02-07T20:20:57+00:00"
         },
         {
+            "name": "folklore/graphql",
+            "version": "v1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Folkloreatelier/laravel-graphql.git",
+                "reference": "2c00e91df18ecc827f2f4fac799d1fc50ff8abac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Folkloreatelier/laravel-graphql/zipball/2c00e91df18ecc827f2f4fac799d1fc50ff8abac",
+                "reference": "2c00e91df18ecc827f2f4fac799d1fc50ff8abac",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.1",
+                "php": ">=5.5.9",
+                "webonyx/graphql-php": "~0.7.0"
+            },
+            "require-dev": {
+                "fzaninotto/faker": "~1.4",
+                "mockery/mockery": "0.9.*",
+                "orchestra/testbench": "~3.1",
+                "phpunit/phpunit": "~4.0|~5.0",
+                "symfony/css-selector": "2.7.*|2.8.*|3.0.*|3.1.*",
+                "symfony/dom-crawler": "2.7.*|2.8.*|3.0.*|3.1.*"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-0": {
+                    "Folklore\\GraphQL\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Folklore",
+                    "email": "info@atelierfolklore.ca",
+                    "homepage": "http://atelierfolklore.ca"
+                },
+                {
+                    "name": "David Mongeau-Petitpas",
+                    "email": "dmp@atelierfolklore.ca",
+                    "homepage": "http://mongo.ca",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Facebook GraphQL for Laravel",
+            "keywords": [
+                "framework",
+                "graphql",
+                "laravel",
+                "react"
+            ],
+            "time": "2016-10-17T13:34:39+00:00"
+        },
+        {
             "name": "jakub-onderka/php-console-color",
             "version": "0.1",
             "source": {
@@ -455,16 +514,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.7.6",
+            "version": "v5.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "93e761bb5367166ce98ba908d5eb0edd6be76792"
+                "reference": "f6e8f6562120e0063313e81716666cfcd362569b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/93e761bb5367166ce98ba908d5eb0edd6be76792",
-                "reference": "93e761bb5367166ce98ba908d5eb0edd6be76792",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f6e8f6562120e0063313e81716666cfcd362569b",
+                "reference": "f6e8f6562120e0063313e81716666cfcd362569b",
                 "shasum": ""
             },
             "require": {
@@ -592,7 +651,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-09-25T14:29:00+00:00"
+            "time": "2018-09-18T13:34:05+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -658,27 +717,95 @@
             "time": "2018-05-17T13:42:07+00:00"
         },
         {
-            "name": "league/flysystem",
-            "version": "1.0.47",
+            "name": "laravelcollective/html",
+            "version": "v5.7.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "a11e4a75f256bdacf99d20780ce42d3b8272975c"
+                "url": "https://github.com/LaravelCollective/html.git",
+                "reference": "777b6d390811ba249255ed5750bf17a019cd88a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/a11e4a75f256bdacf99d20780ce42d3b8272975c",
-                "reference": "a11e4a75f256bdacf99d20780ce42d3b8272975c",
+                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/777b6d390811ba249255ed5750bf17a019cd88a5",
+                "reference": "777b6d390811ba249255ed5750bf17a019cd88a5",
                 "shasum": ""
             },
             "require": {
-                "ext-fileinfo": "*",
+                "illuminate/http": "5.7.*",
+                "illuminate/routing": "5.7.*",
+                "illuminate/session": "5.7.*",
+                "illuminate/support": "5.7.*",
+                "illuminate/view": "5.7.*",
+                "php": ">=7.1.3"
+            },
+            "require-dev": {
+                "illuminate/database": "5.7.*",
+                "mockery/mockery": "~1.0",
+                "phpunit/phpunit": "~7.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.7-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Collective\\Html\\HtmlServiceProvider"
+                    ],
+                    "aliases": {
+                        "Form": "Collective\\Html\\FormFacade",
+                        "Html": "Collective\\Html\\HtmlFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Collective\\Html\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                },
+                {
+                    "name": "Adam Engebretson",
+                    "email": "adam@laravelcollective.com"
+                }
+            ],
+            "description": "HTML and Form Builders for the Laravel Framework",
+            "homepage": "https://laravelcollective.com",
+            "time": "2018-09-05T18:32:53+00:00"
+        },
+        {
+            "name": "league/flysystem",
+            "version": "1.0.46",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem.git",
+                "reference": "f3e0d925c18b92cf3ce84ea5cc58d62a1762a2b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/f3e0d925c18b92cf3ce84ea5cc58d62a1762a2b2",
+                "reference": "f3e0d925c18b92cf3ce84ea5cc58d62a1762a2b2",
+                "shasum": ""
+            },
+            "require": {
                 "php": ">=5.5.9"
             },
             "conflict": {
                 "league/flysystem-sftp": "<1.0.6"
             },
             "require-dev": {
+                "ext-fileinfo": "*",
                 "phpspec/phpspec": "^3.4",
                 "phpunit/phpunit": "^5.7.10"
             },
@@ -739,7 +866,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2018-09-14T15:30:29+00:00"
+            "time": "2018-08-22T07:45:22+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -821,16 +948,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.34.0",
+            "version": "1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "1dbd3cb01c5645f3e7deda7aa46ef780d95fcc33"
+                "reference": "55667c1007a99e82030874b1bb14d24d07108413"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/1dbd3cb01c5645f3e7deda7aa46ef780d95fcc33",
-                "reference": "1dbd3cb01c5645f3e7deda7aa46ef780d95fcc33",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/55667c1007a99e82030874b1bb14d24d07108413",
+                "reference": "55667c1007a99e82030874b1bb14d24d07108413",
                 "shasum": ""
             },
             "require": {
@@ -872,7 +999,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-09-20T19:36:25+00:00"
+            "time": "2018-08-07T08:39:47+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -2297,6 +2424,44 @@
                 "environment"
             ],
             "time": "2018-07-29T20:33:41+00:00"
+        },
+        {
+            "name": "webonyx/graphql-php",
+            "version": "v0.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webonyx/graphql-php.git",
+                "reference": "f91cbf3409ba0385b2d43b1692600efeda43d980"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/f91cbf3409ba0385b2d43b1692600efeda43d980",
+                "reference": "f91cbf3409ba0385b2d43b1692600efeda43d980",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4,<8.0-DEV"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GraphQL\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "description": "A PHP port of GraphQL reference implementation",
+            "homepage": "https://github.com/webonyx/graphql-php",
+            "keywords": [
+                "api",
+                "graphql"
+            ],
+            "time": "2016-09-16T09:48:07+00:00"
         }
     ],
     "packages-dev": [
