@@ -25,7 +25,8 @@ class Tournament extends JsonResource
             'relationships' => [
                 'game' => $this->game,
                 'format' => $this->format,
-                'rounds' => new Rounds ($this->hasRounds),
+                'rounds' => $this->when(!empty($this->rounds), new Rounds ($this->rounds)),
+                'teams' => $this->teams,
                 'roster' => $this->roster,
             ]
         ];

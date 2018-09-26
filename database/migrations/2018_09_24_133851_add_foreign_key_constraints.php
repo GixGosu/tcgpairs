@@ -33,6 +33,7 @@ class AddForeignKeyConstraints extends Migration
         });
         //Seats
         Schema::table('seats', function (Blueprint $table) {
+            $table->foreign('team_id')->references('id')->on('teams');
             $table->foreign('round_id')->references('id')->on('rounds');
             $table->foreign('match_id')->references('id')->on('matches');
             $table->foreign('player_id')->references('id')->on('players');

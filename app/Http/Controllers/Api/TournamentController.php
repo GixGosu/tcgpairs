@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Validator;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 use App\Models\Tournament;
 use App\Http\Resources\Tournament as TournamentResource;
 use App\Http\Resources\Tournaments;
@@ -26,14 +28,14 @@ class TournamentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $r)
+    public function store(Request $r)
     {
         //Validate post request
         $v = Validator::make($r->all(), [
             'title' => 'required|string',
             'event_time' => 'date',
-            'fk_game_id' => 'required|exists:games,id',
-            'fk_format_id' => 'required|exists:formats,id',
+            'game_id' => 'required|exists:games,id',
+            'format_id' => 'required|exists:formats,id',
         ]);
 
         if ($v->fails()) {
@@ -52,8 +54,8 @@ class TournamentController extends Controller
         $tournament = new Tournament ();
         $tournament->title = $r->title;
         $tournament->event_time = isset($r->event_time)?$r->event_time:now();
-        $tournament->fk_game_id = $r->fk_game_id;
-        $tournament->fk_format_id = $r->fk_game_id;
+        $tournament->game_id = $r->game_id;
+        $tournament->format_id = $r->format_id;
         $tournament->save();
 
         return (new TournamentResource($tournament))
@@ -67,7 +69,7 @@ class TournamentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $r, $id)
     {
         //Validate put request
         $v = Validator::make($r->all(), [

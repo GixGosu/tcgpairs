@@ -14,7 +14,14 @@ class Round extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'paired' => $this->paired,
+            'relationships' => [
+                'tournament' => $this->tournament,
+                'matches' => $this->matches,
+            ],
+        ];
     }
 
     public function with($request) 

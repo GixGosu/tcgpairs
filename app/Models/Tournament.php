@@ -18,65 +18,35 @@ class Tournament extends Model
         'done' => 'boolean',
     ];
 
-    public function hasMatches () {
-        return $this->hasMany('App\Models\Match', 'tournament_id', 'id');
+    public function matches () {
+        return $this->hasMany('App\Models\Match');
     }
 
-    public function hasRounds () {
-        return $this->hasMany('App\Models\Round', 'tournament_id', 'id');
+    public function rounds () {
+        return $this->hasMany('App\Models\Round');
     }
 
     public function format () {
-        return $this->hasOne('App\Models\Format', 'id', 'format_id');
+        return $this->belongsTo('App\Models\Format');
     }
 
     public function game () {
-        return $this->hasOne('App\Models\Game', 'id', 'game_id');
+        return $this->belongsTo('App\Models\Game');
     }
 
     public function roster () {
-        return $this->hasMany('App\Models\Roster', 'tournament_id', 'id');
+        return $this->hasMany('App\Models\Roster');
     }
 
     public function createRound () {
-        $round = new Round ($this->id);
+        if (!$this->rounds->latest()->paired)
+            return false;
+        
+        $round = new Round;
+        $round->tournament_id = $this->id;
         $round->sequenced = count($this->rounds) + 1;
         $round->save();
 
-        /*
-         Grab a list of unique teams that are sorted by the players wins, then draws.
-         Formated as 
-         [
-             team => [
-                 Roster::player1, Roster::player2...
-             ],
-         ]
-         */
-        $teams = $this->roster->available()->teams();
-        $unpaired = array_keys($teams->toArray());
-        $paired = [];
-        $matches = [];
-
-        foreach ($teams as $team => $players) {
-            $match = [$team];
-            foreach ($unpaired as $delete => $free) {
-                if (!in_array($free->team_id, $player->played)) {
-                    //Remove team from $unpaired
-                    array_slice($unpaired, array_search($delete, $unpaired));
-
-                    //Add team to the match
-                    array_push($match, $free);
-
-                    //Add team to being paired
-                    array_push($paired, $free);
-                }
-
-                if (count($match) == $this->format->number_of_teams) {
-                    array_push($matches, $match);
-                    $match = [];
-                    break;
-                }
-            }
-        }
+        return $round;
     }
 }

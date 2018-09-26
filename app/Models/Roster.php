@@ -11,21 +11,13 @@ class Roster extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
-    protected $touches = ['player', 'tournament'];
+    protected $touches = ['tournament'];
     protected $casts = [
         'active' => 'boolean',
     ];
 
-    public function player() {
-        return $this->belongsTo('App\Models\Player', 'player_id');
-    }
-
     public function tournament() {
-        return $this->belongsTo('App\Models\Tournament', 'tournament_id');
-    }
-
-    public function scopeTeams($query) {
-        return $query->groupBy('team');
+        return $this->belongsTo('App\Models\Tournament');
     }
 
     public function scopeAvailable($query) {

@@ -15,6 +15,7 @@ class CreateSeatsTable extends Migration
     {
         Schema::create('seats', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('team_id')->unsigned();
             $table->integer('player_id')->unsigned();
             $table->integer('match_id')->unsigned();
             $table->integer('round_id')->unsigned();

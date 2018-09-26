@@ -13,4 +13,12 @@ class Team extends Model
         'active' => 'boolean',
         'played' => 'array',
     ];
+    
+    public function players() {
+        return $this->hasMany('App\Models\Roster');
+    }
+    
+    public function scopeAvailable($query) {
+        return $query->where('active', true)->sortByDesc('draws')->sortByDesc('wins');
+    }
 }

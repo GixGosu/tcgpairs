@@ -13,6 +13,6 @@ class Game extends Model
     protected $guarded = ['id'];
 
     public function formats () {
-        return $this->hasMany('App\Models\Format', 'id', 'game_id');
+        return $this->hasMany('App\Models\Format');
     }
 }

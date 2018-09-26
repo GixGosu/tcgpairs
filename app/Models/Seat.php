@@ -11,17 +11,20 @@ class Seat extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
-    protected $touches = ['inMatch', 'inRound', 'inTournament'];
+    protected $touches = ['match', 'round', 'tournament'];
+
+    public function __construct () {
+    }
     
-    public function inMatch () {
-        return $this->belongsTo('App\Models\Match', 'match_id');
+    public function match () {
+        return $this->belongsTo('App\Models\Match');
     }
 
-    public function inRound () {
-        return $this->belongsTo('App\Models\Round', 'round_id');
+    public function round () {
+        return $this->belongsTo('App\Models\Round');
     }
 
-    public function inTournament () {
-        return $this->belongsTo('App\Models\Tournament', 'tournament_id');
+    public function tournament () {
+        return $this->belongsTo('App\Models\Tournament');
     }
 }
