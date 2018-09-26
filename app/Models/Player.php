@@ -9,7 +9,7 @@ class Player extends Model
 {
     //
     use SoftDeletes;
-    protected $table = 'player';
+    protected $table = 'players';
     protected $guarded = ['id'];
 
     public function getFLNameAttribute() {

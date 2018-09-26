@@ -47,7 +47,16 @@ class RoundController extends Controller
         }
 
         $round = Tournament::find($r->tournament_id)->createRound();
-
+        if (!$round) {
+            $response = [
+                'success' => false,
+                'errors' => 'Last round has not been paired. Either delete, or pair round.',
+                'data' => [],
+            ];
+            return response()
+                ->json($response)
+                ->setStatusCode(400);
+        }
         
         return (new RoundResource($round))
             ->response()
@@ -102,4 +111,11 @@ class RoundController extends Controller
     /**
      * Non-resource functions
      */
+
+     /**
+      * Create matches for specified round.
+      *
+      * @param  int  $id
+      * @return \App\Http\Responses\Round
+      */
 }

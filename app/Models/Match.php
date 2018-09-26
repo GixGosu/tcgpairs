@@ -13,11 +13,8 @@ class Match extends Model
     protected $guarded = ['id'];
     protected $touches = ['round', 'tournament'];
 
-    public function __construct ($round = null) {
-        if (isset($round)) {
-            $this->tournament_id = $round->tournament_id;
-            $this->round_id = $round->id;
-        }
+    public function __construct () {
+        
     }
 
     public function seats () {

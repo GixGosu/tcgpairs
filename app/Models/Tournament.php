@@ -23,7 +23,7 @@ class Tournament extends Model
     }
 
     public function rounds () {
-        return $this->hasMany('App\Models\Round');
+        return $this->hasMany('App\Models\Round')->orderby('created_at')->orderBy('sequenced');
     }
 
     public function format () {
@@ -39,7 +39,7 @@ class Tournament extends Model
     }
 
     public function createRound () {
-        if (!$this->rounds->latest()->paired)
+        if (!empty($this->rounds->last()) && !$this->rounds->last()->paired)
             return false;
         
         $round = new Round;
