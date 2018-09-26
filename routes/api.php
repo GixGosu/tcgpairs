@@ -18,6 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resources([
+    'games' => 'Api\\GameController',
+    'formats' => 'Api\\FormatController',
     'tournaments' => 'Api\\TournamentController',
+    'roster' => 'Api\\RosterController',
     'rounds' => 'Api\\RoundController',
 ]);

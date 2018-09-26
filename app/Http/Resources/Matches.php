@@ -16,4 +16,13 @@ class Matches extends ResourceCollection
     {
         return parent::toArray($request);
     }
+    
+    public function with($request) 
+    {
+        return [
+            'success' => true,
+            'errors' => [],
+            'totalItems' => $this->collection->count(),
+        ];
+    }
 }

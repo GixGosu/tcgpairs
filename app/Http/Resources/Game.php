@@ -2,22 +2,25 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class Rounds extends ResourceCollection
+class Game extends JsonResource
 {
     /**
-     * Transform the resource collection into an array.
+     * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function toArray($request)
     {
-        //return parent::toArray($request);
         return [
-            'data' => Round::collection($this->collection),
-            'totalItems' => $this->collection->count(),
+            'id' => $this->id,
+            'title' => $this->title,
+            'abbrv' => $this->abbrv,
+            'relationships' => [
+                'formats' => $this->formats,
+            ],
         ];
     }
 

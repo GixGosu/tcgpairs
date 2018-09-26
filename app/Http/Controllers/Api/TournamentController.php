@@ -17,14 +17,31 @@ class TournamentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $r)
     {
+        //Validate get request
+        $v = Validator::make($r->all(), [
+            'limit' => 'integer',
+        ]);
+        if ($v->fails()) {
+            $errs = $v->errors();
+            $response = [
+                'success' => false,
+                'errors' => $errs->all(),
+                'data' => [],
+            ];
+            return response()
+                ->json($response)
+                ->setStatusCode(400);
+        }
+        $limit = isset($r->limit)?$r->limit:10;
+
         //Get the 5 most recent tournaments
-        return new Tournaments (Tournament::orderBy('event_time', 'desc')->paginate(5));
+        return new Tournaments (Tournament::orderBy('event_time', 'desc')->paginate($limit));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created resource in storage.
      *
      * @return \Illuminate\Http\Response
      */
@@ -64,7 +81,7 @@ class TournamentController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Update a resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -72,7 +89,7 @@ class TournamentController extends Controller
     public function update(Request $r, $id)
     {
         //Validate put request
-        $v = Validator::make($r->all(), [
+        $v = Validator::make(array_merge(['id' => $id], $r->all()), [
             'id' => 'required|exists:tournaments,id',
             'title' => 'string',
             'event_time' => 'date',
@@ -136,6 +153,9 @@ class TournamentController extends Controller
     public function destroy($id)
     {
         //
+        $tournament = Tournament::findOrFail($id)->delete();
+
+        return new TournamentResource($tournament);
     }
 
 }

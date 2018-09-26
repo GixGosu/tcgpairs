@@ -25,6 +25,7 @@ class Tournaments extends ResourceCollection
         return [
             'success' => true,
             'errors' => [],
+            'totalItems' => $this->collection->count(),
         ];
     }
 }
