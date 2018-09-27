@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/tournaments/index', function () {
+    return view('tournaments.index');
+});
