@@ -122,7 +122,7 @@ class TournamentController extends Controller
 
         if (isset($r->fk_format_id))
             $tournament->fk_format_id = $r->fk_format_id;
-            
+
         $tournament->save();
 
         return (new TournamentResource($tournament))

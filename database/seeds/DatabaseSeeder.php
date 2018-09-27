@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             GamesTableSeeder::class,
             FormatsTableSeeder::class,
             PlayersTableSeeder::class,
+            TournamentTableSeeder::class
         ]);
     }
 }
