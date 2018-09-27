@@ -1,6 +1,8 @@
 // dependencies
 import Vue from 'vue'
 
+import TournamentsIndex from './components/tournaments/index.vue'
+
 new Vue({
   el: '#vue-app',
   data: {

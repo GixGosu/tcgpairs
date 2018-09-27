@@ -1,18 +1,16 @@
-var elixir = require('laravel-elixir')
 var gulp = require('gulp')
-
-require('laravel-elixir-webpack');
+var elixir = require('laravel-elixir')
+var vueify = require('laravel-elixir-vue-2')
 
 // build out a public version of all of our better organized scripts
 elixir(function(mix) {
     mix.browserify('main.js')
     mix.browserify('app.js')
     mix.sass(['boss.scss'], 'public/css/boss.css')
-    mix.sass(['store.scss', 'slick-theme.css', 'store-styles.scss'], 'public/css/store.css')
-        .scriptsIn('resources/assets/js/controllers', 'resources/assets/js/controllers.js')
+    mix.scriptsIn('resources/assets/js/controllers', 'resources/assets/js/controllers.js')
         .scriptsIn('resources/assets/js/directives', 'resources/assets/js/directives.js')
         .scriptsIn('resources/assets/js/services', 'resources/assets/js/services.js')
-        .babel([
+        .rollup([
           'angApp.js',
           'helpers.js',
           'slick.js',

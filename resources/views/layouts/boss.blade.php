@@ -7,6 +7,9 @@
 @endsection
 <div id="mainContent">
     @yield('content')
+    <div id="app">
+        
+    </div>
 </div>
 @section('footer')
 @endsection
