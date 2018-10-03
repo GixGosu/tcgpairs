@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use Validator;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 use App\Http\Resources\Round as RoundResource;
+use App\Http\Resources\Collections\Matches;
 use App\Models\Tournament;
+use App\Models\Round;
 
 class RoundController extends Controller
 {
@@ -16,46 +17,39 @@ class RoundController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($tournamentId)
     {
-        //
+        //Validate $tournamentId
+        $v = Validator::make(['tournamentId' => $tournamentId],[
+            'tournamentId' => 'required|exists:tournaments,id',
+        ]);
+        if ($v->fails())
+            return $this->errors($v);
+
+        return (new Rounds (Tournament::findOrFail($tournamentId)->rounds))
+        ->response()
+        ->setStatusCode(200);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $r)
+    public function create($tournamentId)
     {
-        //Validate post request
-        $v = Validator::make($r->all(), [
-            'tournament_id' => 'required|exists:tournaments,id',
+        //Validate $tournamentId variable
+        $v = Validator::make(['tournamentId' => $tournamentId], [
+            'tournamentId' => 'required|exists:tournaments,id',
         ]);
+        if ($v->fails())
+            return $this->errors($v);
 
-        if ($v->fails()) {
-            $errs = $v->errors();
-            $response = [
-                'success' => false,
-                'errors' => $errs->all(),
-                'data' => [],
-            ];
-            return response()
-                ->json($response)
-                ->setStatusCode(400);
-        }
-
-        $round = Tournament::find($r->tournament_id)->createRound();
-        if (!$round) {
-            $response = [
-                'success' => false,
-                'errors' => 'Last round has not been paired. Either delete, or pair round.',
-                'data' => [],
-            ];
-            return response()
-                ->json($response)
-                ->setStatusCode(400);
+        $round = Tournament::find($tournamentId)->createRound();
+        if (!$round){
+            $v->errors()->add('id', 'Blank round already created');
+            return $this->errors($v, 500);
         }
         
         return (new RoundResource($round))
@@ -71,7 +65,14 @@ class RoundController extends Controller
      */
     public function show($id)
     {
-        //
+        //Validate $id
+        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:rounds']);
+        if ($v->fails())
+            return $this->errors($v);
+
+        return (new RoundResource (Round::findOrFail($id)))
+            ->response()
+            ->setStatusCode(200);;
     }
 
     /**
@@ -94,7 +95,14 @@ class RoundController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //Validate $id
+        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:rounds']);
+        if ($v->fails())
+            return $this->errors($v);
+
+        $round = Round::destroy($id);
+
+        return response()->setStatusCode(200);
     }
 
     /**
@@ -107,4 +115,19 @@ class RoundController extends Controller
       * @param  int  $id
       * @return \App\Http\Responses\Round
       */
+      public function pair ($id) {
+        //Validate $id
+        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:rounds']);
+        if ($v->fails())
+            return $this->errors($v);
+
+        $round = Round::find($id);
+        if ($round->createMatches())
+            return new Matches ($round->matches);
+        else {
+            $v->errors()->add('id', 'Error in pairing round, contact developer');
+            return response()->json($this->errors($v))->setStatusCode(400);
+        }
+
+      }
 }

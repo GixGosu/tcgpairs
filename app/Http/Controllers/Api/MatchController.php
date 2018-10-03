@@ -2,32 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use Validator;
 use Illuminate\Http\Request;
 
-use App\Models\Game;
-use App\Http\Resources\Game as GameResource;
-use App\Http\Resources\Collections\Games;
-
-class GameController extends Controller
+class MatchController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $r)
+    public function index()
     {
-        //Validate get request
-        $v = Validator::make($r->all(), [
-            'perPage' => 'required_with:page|integer',
-            'page' => 'sometimes|integer',
-        ]);
-        if ($v->fails())
-            return $this->errors($v);
-        
-        //Return a list of games with pagination (default 10)
-        return new Games (Game::paginate(isset($r->perPage)?$r->perPage:10));
+        //
     }
 
     /**
@@ -50,7 +36,7 @@ class GameController extends Controller
     public function show($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:games']);
+        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:matches']);
         if ($v->fails())
             return $this->errors($v);
     }
@@ -76,7 +62,7 @@ class GameController extends Controller
     public function destroy($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:games']);
+        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:matches']);
         if ($v->fails())
             return $this->errors($v);
     }

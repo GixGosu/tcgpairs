@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Collections;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Http\Resources\Game;
 
 class Games extends ResourceCollection
 {
@@ -16,15 +16,6 @@ class Games extends ResourceCollection
     {
         return [
             'data' => Game::collection($this->collection),
-        ];
-    }
-
-    public function with($request) 
-    {
-        return [
-            'success' => true,
-            'errors' => [],
-            'totalItems' => $this->collection->count(),
         ];
     }
 }

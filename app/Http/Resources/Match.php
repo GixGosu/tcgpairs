@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class Match extends JsonResource
+class Match extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -30,5 +28,10 @@ class Match extends JsonResource
                 'round' => $this->round,
             ],
         ];
+    }
+
+    public function with($request) 
+    {
+        return parent::with($request)
     }
 }

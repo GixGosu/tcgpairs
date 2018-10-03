@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources;
 
-class Game extends BaseResource
+use App\Models\Player as PlayerModel;
+
+class Roster extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -13,18 +15,14 @@ class Game extends BaseResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'abbrv' => $this->abbrv,
-            'relationships' => [
-                'formats' => $this->formats,
-            ],
+            'active' => $this->active,
+            'playerId' => $this->player_id,
+            'playerName' => $this->player->l_f_name,
         ];
     }
 
-
     public function with($request) 
     {
-        return parent::with($request)
+        return parent::with($request);
     }
 }

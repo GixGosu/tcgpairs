@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Collections;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Http\Resources\Round;
 
 class Rounds extends ResourceCollection
 {
@@ -17,15 +17,14 @@ class Rounds extends ResourceCollection
         //return parent::toArray($request);
         return [
             'data' => Round::collection($this->collection),
-            'totalItems' => $this->collection->count(),
         ];
     }
 
-    public function with($request) 
-    {
-        return [
-            'success' => true,
-            'errors' => [],
-        ];
+    public function with ($request) {
+        return array_merge(parent::with($request), [
+            'relationships' => [
+                'tournament' => $this->collection->first()->tournament,
+            ],
+        ]);
     }
 }

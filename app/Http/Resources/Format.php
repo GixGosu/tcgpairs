@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class Format extends JsonResource
+class Format extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -32,9 +30,6 @@ class Format extends JsonResource
 
     public function with($request) 
     {
-        return [
-            'success' => true,
-            'errors' => [],
-        ];
+        return parent::with($request)
     }
 }

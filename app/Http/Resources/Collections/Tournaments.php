@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Collections;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Http\Resources\Tournament;
+use App\Http\Resources\Roster;
+use App\Http\Resources\Round;
+use App\Http\Resources\Team;
 
 class Tournaments extends ResourceCollection
 {
@@ -19,13 +22,5 @@ class Tournaments extends ResourceCollection
             'data' => Tournament::collection($this->collection),
         ];
     }
-
-    public function with($request) 
-    {
-        return [
-            'success' => true,
-            'errors' => [],
-            'totalItems' => $this->collection->count(),
-        ];
-    }
+    
 }

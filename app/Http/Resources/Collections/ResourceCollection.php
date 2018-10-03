@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Collections;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\ResourceCollection as BaseResourceCollection;
 
-class Matches extends ResourceCollection
+class ResourceCollection extends BaseResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -16,8 +16,11 @@ class Matches extends ResourceCollection
     {
         return parent::toArray($request);
     }
-    
-    public function with($request) 
+
+    /**
+     * Set with () function
+     */
+    public function with ($request)
     {
         return [
             'success' => true,

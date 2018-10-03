@@ -18,6 +18,7 @@ class CreateRoundsTable extends Migration
             $table->integer('tournament_id')->unsigned();
             
             $table->integer('sequenced')->default(0);
+            $table->integer('reported')->default(0);
             $table->integer('paired')->default(0);
 
             $table->timestamps();
