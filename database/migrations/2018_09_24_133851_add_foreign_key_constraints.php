@@ -18,10 +18,12 @@ class AddForeignKeyConstraints extends Migration
             $table->foreign('game_id')->references('id')->on('games');
         });
         //Tournaments
+        // commenting out temporarily for testing
+        /*
         Schema::table('tournaments', function (Blueprint $table) {
             $table->foreign('format_id')->references('id')->on('formats');
             $table->foreign('game_id')->references('id')->on('games');
-        });
+        });*/
         //Rounds
         Schema::table('rounds', function (Blueprint $table) {
             $table->foreign('tournament_id')->references('id')->on('tournaments');
@@ -59,6 +61,5 @@ class AddForeignKeyConstraints extends Migration
      */
     public function down()
     {
-        //
     }
 }
