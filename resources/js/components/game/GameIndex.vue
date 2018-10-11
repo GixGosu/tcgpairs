@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card card-default">
-                    <div class="card-header">game Index</span></div>
+                    <div class="card-header">Game Index</span></div>
 
                     <div class="card-body">
                         <table>
@@ -14,14 +14,26 @@
                                     <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
                                 </span>
                             </th>
-                            <th @click="sortColumn('game.title')">game Title
-                                <span v-show="indexRequest.column == 'game.title'">
+                            <th @click="sortColumn('game.title')">Game ID
+                                <span v-show="indexRequest.column == 'game.game_id'">
                                     <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
                                     <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
                                 </span>
                             </th>
-                            <th @click="sortColumn('game.abbrv')">Event Time
-                                <span v-show="indexRequest.column == 'game.event_time'">
+                            <th @click="sortColumn('game.abbrv')">Format ID
+                                <span v-show="indexRequest.column == 'game.format_id'">
+                                    <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
+                                    <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
+                                </span>
+                            </th>
+                            <th @click="sortColumn('game.created_at')">Created At
+                                <span v-show="indexRequest.column == 'game.created_at'">
+                                    <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
+                                    <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
+                                </span>
+                            </th>
+                            <th @click="sortColumn('game.updated_at')">Updated At
+                                <span v-show="indexRequest.column == 'game.updated_at'">
                                     <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
                                     <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
                                 </span>
@@ -31,8 +43,8 @@
                             <td>{{ game.id }}</td>
                             <td>{{ game.title }}</td>
                             <td>{{ game.abbrv }}</td>
-                            <td>{{ game.created_at.date }}</td>
-                            <td>{{ game.updated_at.date }}</td>
+                            <td>{{ game.created_at }}</td>
+                            <td>{{ game.updated_at }}</td>
                           </tr>
                         </table>
                     </div>
