@@ -49034,7 +49034,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   index: function index(params) {
-    return __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__["a" /* default */].get('/api/players', params);
+    return __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__["a" /* default */].get('/api/player', params);
   }
 });
 

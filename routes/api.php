@@ -23,4 +23,5 @@ Route::resources([
     'tournaments' => 'Api\\TournamentController',
     'roster' => 'Api\\RosterController',
     'rounds' => 'Api\\RoundController',
+    'player' => 'Api\\PlayerController'
 ]);
