@@ -3,36 +3,69 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card card-default">
-                    <div class="card-header">game Index</span></div>
+                    <div class="card-header">Tournament Index</span></div>
 
                     <div class="card-body">
                         <table>
                           <thead>
-                            <th @click="sortColumn('game.id')">ID
-                                <span v-show="indexRequest.column == 'game.id'">
+                            <th @click="sortColumn('tournament.id')">ID
+                                <span v-show="indexRequest.column == 'tournament.id'">
                                     <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
                                     <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
                                 </span>
                             </th>
-                            <th @click="sortColumn('game.title')">game Title
-                                <span v-show="indexRequest.column == 'game.title'">
+                            <th @click="sortColumn('tournament.game_id')">Game ID
+                                <span v-show="indexRequest.column == 'tournament.game_id'">
                                     <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
                                     <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
                                 </span>
                             </th>
-                            <th @click="sortColumn('game.abbrv')">Event Time
-                                <span v-show="indexRequest.column == 'game.event_time'">
+                            <th @click="sortColumn('tournament.format_id')">Format ID
+                                <span v-show="indexRequest.column == 'tournament.format_id'">
+                                    <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
+                                    <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
+                                </span>
+                            </th>
+                            <th @click="sortColumn('tournament.title')">Tournament Title
+                                <span v-show="indexRequest.column == 'tournament.title'">
+                                    <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
+                                    <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
+                                </span>
+                            </th>
+                            <th @click="sortColumn('tournament.event_time')">Event Time
+                                <span v-show="indexRequest.column == 'tournament.event_time'">
+                                    <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
+                                    <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
+                                </span>
+                            </th>
+                            <th @click="sortColumn('tournament.done')">Completed
+                                <span v-show="indexRequest.column == 'tournament.done'">
+                                    <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
+                                    <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
+                                </span>
+                            </th>
+                            <th @click="sortColumn('tournament.created_at.date')">Created At
+                                <span v-show="indexRequest.column == 'tournament.created_at.date'">
+                                    <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
+                                    <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
+                                </span>
+                            </th>
+                            <th @click="sortColumn('tournament.updated_at.date')">Updated At
+                                <span v-show="indexRequest.column == 'tournament.updated_at.date'">
                                     <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
                                     <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
                                 </span>
                             </th>
                           </thead>
-                          <tr v-for="game in games">
-                            <td>{{ game.id }}</td>
-                            <td>{{ game.title }}</td>
-                            <td>{{ game.abbrv }}</td>
-                            <td>{{ game.created_at.date }}</td>
-                            <td>{{ game.updated_at.date }}</td>
+                          <tr v-for="tournament in tournaments">
+                            <td>{{ tournament.id }}</td>
+                            <td>{{ tournament.game_id }}</td>
+                            <td>{{ tournament.format_id }}</td>
+                            <td>{{ tournament.title }}</td>
+                            <td>{{ tournament.event_time.date }}</td>
+                            <td>{{ tournament.done }}</td>
+                            <td>{{ tournament.created_at.date }}</td>
+                            <td>{{ tournament.updated_at.date }}</td>
                           </tr>
                         </table>
                     </div>
@@ -43,15 +76,15 @@
 </template>
 
 <script>
-import game from '../../resources/game.js'
+import Tournament from '../../resources/tournament.js'
 
 export default {
   data: function () {
     return {
-      games: [],
+      tournaments: [],
       indexRequest: {
           order: 'DESC',
-          column: 'game.id',
+          column: 'tournament.id',
           per_page: 10,
           search_term: '',
           page: 1
@@ -61,16 +94,16 @@ export default {
   },
   mounted: function () {
     console.log('Component mounted.')
-    this.loadgames()
+    this.loadTournaments()
   },
   methods: {
-    loadgames: function() {
-      game.index()
+    loadTournaments: function() {
+      Tournament.index()
         .then((response) => {
           if (response.error) {
             console.log('error')
           }
-          this.games = response.data
+          this.tournaments = response.data
           console.log(response)
         })
     },
