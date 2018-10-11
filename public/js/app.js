@@ -24954,12 +24954,93 @@ module.exports = Vue;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(46);
-
+if (!window.Vue) {
+  window.Vue = __webpack_require__(12);
+}
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-  index: function index(params) {
-    return __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__["a" /* default */].get('/api/games', params);
+  get: function get(endpoint, params) {
+    var _this = this;
+
+    return axios.get(endpoint, { params: params }).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this.handleError(error);
+    });
+  },
+  post: function post(endpoint, params, options) {
+    var _this2 = this;
+
+    if (options && options.header) {
+      options.header['X-CSRF-TOKEN'] = standardOptions.header['X-CSRF-TOKEN'];
+    } else {
+      options = standardOptions;
+    }
+    return window.Vue.http.post(endpoint, params, options).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this2.handleError(error);
+    });
+  },
+  put: function put(endpoint, params) {
+    var _this3 = this;
+
+    return window.Vue.http.put(endpoint, params, standardOptions).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this3.handleError(error);
+    });
+  },
+  patch: function patch(endpoint, params) {
+    var _this4 = this;
+
+    return window.Vue.http.patch(endpoint, params, standardOptions).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this4.handleError(error);
+    });
+  },
+  delete: function _delete(endpoint, params) {
+    var _this5 = this;
+
+    var options;
+    if (params) {
+      options = {
+        params: params,
+        headers: { 'X-CSRF-TOKEN': standardOptions.headers['X-CSRF-TOKEN'] }
+      };
+    } else {
+      options = standardOptions;
+    }
+    return window.Vue.http.delete(endpoint, options).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this5.handleError(error);
+    });
+  },
+  handleError: function handleError(error) {
+    var message;
+    switch (error.status) {
+      case 500:
+        message = ['500 ERROR: Please contact support.'];
+        break;
+      case 404:
+        message = ['The requested data was not found.'];
+        break;
+      case 400:
+        message = error.body;
+        break;
+      case 422:
+        message = error.body;
+        break;
+      default:
+        message = error.body;
+    }
+    return {
+      error: true,
+      code: error.status,
+      message: message
+    };
   }
 });
 
@@ -24968,7 +25049,7 @@ module.exports = Vue;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(15);
-module.exports = __webpack_require__(51);
+module.exports = __webpack_require__(52);
 
 
 /***/ }),
@@ -47477,7 +47558,40 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_game_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_tournament_js__ = __webpack_require__(46);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -47528,10 +47642,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      games: [],
+      tournaments: [],
       indexRequest: {
         order: 'DESC',
-        column: 'game.id',
+        column: 'tournament.id',
         per_page: 10,
         search_term: '',
         page: 1
@@ -47541,17 +47655,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   mounted: function mounted() {
     console.log('Component mounted.');
-    this.loadgames();
+    this.loadTournaments();
   },
   methods: {
-    loadgames: function loadgames() {
+    loadTournaments: function loadTournaments() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_0__resources_game_js__["a" /* default */].index().then(function (response) {
+      __WEBPACK_IMPORTED_MODULE_0__resources_tournament_js__["a" /* default */].index().then(function (response) {
         if (response.error) {
           console.log('error');
         }
-        _this.games = response.data;
+        _this.tournaments = response.data;
         console.log(response);
       });
     },
@@ -47570,93 +47684,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-if (!window.Vue) {
-  window.Vue = __webpack_require__(12);
-}
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(13);
+
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-  get: function get(endpoint, params) {
-    var _this = this;
-
-    return axios.get(endpoint, { params: params }).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this.handleError(error);
-    });
-  },
-  post: function post(endpoint, params, options) {
-    var _this2 = this;
-
-    if (options && options.header) {
-      options.header['X-CSRF-TOKEN'] = standardOptions.header['X-CSRF-TOKEN'];
-    } else {
-      options = standardOptions;
-    }
-    return window.Vue.http.post(endpoint, params, options).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this2.handleError(error);
-    });
-  },
-  put: function put(endpoint, params) {
-    var _this3 = this;
-
-    return window.Vue.http.put(endpoint, params, standardOptions).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this3.handleError(error);
-    });
-  },
-  patch: function patch(endpoint, params) {
-    var _this4 = this;
-
-    return window.Vue.http.patch(endpoint, params, standardOptions).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this4.handleError(error);
-    });
-  },
-  delete: function _delete(endpoint, params) {
-    var _this5 = this;
-
-    var options;
-    if (params) {
-      options = {
-        params: params,
-        headers: { 'X-CSRF-TOKEN': standardOptions.headers['X-CSRF-TOKEN'] }
-      };
-    } else {
-      options = standardOptions;
-    }
-    return window.Vue.http.delete(endpoint, options).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this5.handleError(error);
-    });
-  },
-  handleError: function handleError(error) {
-    var message;
-    switch (error.status) {
-      case 500:
-        message = ['500 ERROR: Please contact support.'];
-        break;
-      case 404:
-        message = ['The requested data was not found.'];
-        break;
-      case 400:
-        message = error.body;
-        break;
-      case 422:
-        message = error.body;
-        break;
-      default:
-        message = error.body;
-    }
-    return {
-      error: true,
-      code: error.status,
-      message: message
-    };
+  index: function index(params) {
+    return __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__["a" /* default */].get('/api/tournaments', params);
   }
 });
 
@@ -47672,7 +47705,9 @@ var render = function() {
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "card card-default" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("game Index")]),
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("Tournament Index")
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c(
@@ -47684,7 +47719,7 @@ var render = function() {
                     {
                       on: {
                         click: function($event) {
-                          _vm.sortColumn("game.id")
+                          _vm.sortColumn("tournament.id")
                         }
                       }
                     },
@@ -47697,8 +47732,9 @@ var render = function() {
                             {
                               name: "show",
                               rawName: "v-show",
-                              value: _vm.indexRequest.column == "game.id",
-                              expression: "indexRequest.column == 'game.id'"
+                              value: _vm.indexRequest.column == "tournament.id",
+                              expression:
+                                "indexRequest.column == 'tournament.id'"
                             }
                           ]
                         },
@@ -47750,12 +47786,12 @@ var render = function() {
                     {
                       on: {
                         click: function($event) {
-                          _vm.sortColumn("game.title")
+                          _vm.sortColumn("tournament.game_id")
                         }
                       }
                     },
                     [
-                      _vm._v("game Title\n                            "),
+                      _vm._v("Game ID\n                            "),
                       _c(
                         "span",
                         {
@@ -47763,8 +47799,10 @@ var render = function() {
                             {
                               name: "show",
                               rawName: "v-show",
-                              value: _vm.indexRequest.column == "game.title",
-                              expression: "indexRequest.column == 'game.title'"
+                              value:
+                                _vm.indexRequest.column == "tournament.game_id",
+                              expression:
+                                "indexRequest.column == 'tournament.game_id'"
                             }
                           ]
                         },
@@ -47816,7 +47854,144 @@ var render = function() {
                     {
                       on: {
                         click: function($event) {
-                          _vm.sortColumn("game.abbrv")
+                          _vm.sortColumn("tournament.format_id")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("Format ID\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.indexRequest.column ==
+                                "tournament.format_id",
+                              expression:
+                                "indexRequest.column == 'tournament.format_id'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("tournament.title")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("Tournament Title\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.indexRequest.column == "tournament.title",
+                              expression:
+                                "indexRequest.column == 'tournament.title'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("tournament.event_time")
                         }
                       }
                     },
@@ -47830,9 +48005,216 @@ var render = function() {
                               name: "show",
                               rawName: "v-show",
                               value:
-                                _vm.indexRequest.column == "game.event_time",
+                                _vm.indexRequest.column ==
+                                "tournament.event_time",
                               expression:
-                                "indexRequest.column == 'game.event_time'"
+                                "indexRequest.column == 'tournament.event_time'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("tournament.done")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("Completed\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.indexRequest.column == "tournament.done",
+                              expression:
+                                "indexRequest.column == 'tournament.done'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("tournament.created_at.date")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("Created At\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.indexRequest.column ==
+                                "tournament.created_at.date",
+                              expression:
+                                "indexRequest.column == 'tournament.created_at.date'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("tournament.updated_at.date")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("Updated At\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.indexRequest.column ==
+                                "tournament.updated_at.date",
+                              expression:
+                                "indexRequest.column == 'tournament.updated_at.date'"
                             }
                           ]
                         },
@@ -47880,17 +48262,23 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _vm._l(_vm.games, function(game) {
+                _vm._l(_vm.tournaments, function(tournament) {
                   return _c("tr", [
-                    _c("td", [_vm._v(_vm._s(game.id))]),
+                    _c("td", [_vm._v(_vm._s(tournament.id))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(game.title))]),
+                    _c("td", [_vm._v(_vm._s(tournament.game_id))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(game.abbrv))]),
+                    _c("td", [_vm._v(_vm._s(tournament.format_id))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(game.created_at.date))]),
+                    _c("td", [_vm._v(_vm._s(tournament.title))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(game.updated_at.date))])
+                    _c("td", [_vm._v(_vm._s(tournament.event_time.date))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(tournament.done))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(tournament.created_at.date))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(tournament.updated_at.date))])
                   ])
                 })
               ],
@@ -47921,7 +48309,7 @@ var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(49)
 /* template */
-var __vue_template__ = __webpack_require__(50)
+var __vue_template__ = __webpack_require__(51)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47965,7 +48353,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_game_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_game_js__ = __webpack_require__(50);
 //
 //
 //
@@ -48067,6 +48455,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 /* 50 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(13);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  index: function index(params) {
+    return __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__["a" /* default */].get('/api/games', params);
+  }
+});
+
+/***/ }),
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -48455,7 +48857,7 @@ if (false) {
 }
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
