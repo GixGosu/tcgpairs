@@ -18,3 +18,7 @@ Route::get('/', function () {
 Route::get('/tournaments/index', function () {
     return view('tournaments.index');
 });
+
+Route::get('/game/index', function () {
+    return view('game.index');
+});
