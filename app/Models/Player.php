@@ -11,11 +11,14 @@ class Player extends Model
     use SoftDeletes;
     protected $table = 'players';
     protected $guarded = ['id'];
+    protected $dates = [
+        'created_at', 'updated_at', 'deleted_at'
+    ];
 
     public function getFLNameAttribute() {
         return ucfirst(strtolower($this->f_name)) . ' ' . ucfirst(strtolower($this->l_name));
     }
-    
+
     public function getLFNameAttribute() {
         return ucfirst(strtolower($this->l_name)) . ', ' . ucfirst(strtolower($this->f_name));
     }
