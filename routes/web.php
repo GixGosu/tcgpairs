@@ -22,3 +22,7 @@ Route::get('/tournament/index', function () {
 Route::get('/game/index', function () {
     return view('game.index');
 });
+
+Route::get('/player/index', function () {
+    return view('player.index');
+});
