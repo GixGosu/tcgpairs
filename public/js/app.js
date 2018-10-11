@@ -70,7 +70,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(6);
+var bind = __webpack_require__(7);
 var isBuffer = __webpack_require__(22);
 
 /*global toString:true*/
@@ -402,110 +402,6 @@ module.exports = g;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(24);
-
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(8);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(8);
-  }
-  return adapter;
-}
-
-var defaults = {
-  adapter: getDefaultAdapter(),
-
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  /**
-   * A timeout in milliseconds to abort a request. If set to 0 (default) a
-   * timeout is not created.
-   */
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
-  }
-};
-
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  defaults.headers[method] = {};
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-
-module.exports = defaults;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -614,7 +510,206 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(0);
+var normalizeHeaderName = __webpack_require__(24);
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(9);
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(9);
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  /**
+   * A timeout in milliseconds to abort a request. If set to 0 (default) a
+   * timeout is not created.
+   */
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
+
+/***/ }),
 /* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+if (!window.Vue) {
+  window.Vue = __webpack_require__(13);
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  get: function get(endpoint, params) {
+    var _this = this;
+
+    return axios.get(endpoint, { params: params }).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this.handleError(error);
+    });
+  },
+  post: function post(endpoint, params, options) {
+    var _this2 = this;
+
+    if (options && options.header) {
+      options.header['X-CSRF-TOKEN'] = standardOptions.header['X-CSRF-TOKEN'];
+    } else {
+      options = standardOptions;
+    }
+    return window.Vue.http.post(endpoint, params, options).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this2.handleError(error);
+    });
+  },
+  put: function put(endpoint, params) {
+    var _this3 = this;
+
+    return window.Vue.http.put(endpoint, params, standardOptions).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this3.handleError(error);
+    });
+  },
+  patch: function patch(endpoint, params) {
+    var _this4 = this;
+
+    return window.Vue.http.patch(endpoint, params, standardOptions).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this4.handleError(error);
+    });
+  },
+  delete: function _delete(endpoint, params) {
+    var _this5 = this;
+
+    var options;
+    if (params) {
+      options = {
+        params: params,
+        headers: { 'X-CSRF-TOKEN': standardOptions.headers['X-CSRF-TOKEN'] }
+      };
+    } else {
+      options = standardOptions;
+    }
+    return window.Vue.http.delete(endpoint, options).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this5.handleError(error);
+    });
+  },
+  handleError: function handleError(error) {
+    var message;
+    switch (error.status) {
+      case 500:
+        message = ['500 ERROR: Please contact support.'];
+        break;
+      case 404:
+        message = ['The requested data was not found.'];
+        break;
+      case 400:
+        message = error.body;
+        break;
+      case 422:
+        message = error.body;
+        break;
+      default:
+        message = error.body;
+    }
+    return {
+      error: true,
+      code: error.status,
+      message: message
+    };
+  }
+});
+
+/***/ }),
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3155,7 +3250,7 @@ Popper.Defaults = Defaults;
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -13526,7 +13621,7 @@ return jQuery;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13544,7 +13639,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -13734,7 +13829,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13745,7 +13840,7 @@ var settle = __webpack_require__(25);
 var buildURL = __webpack_require__(27);
 var parseHeaders = __webpack_require__(28);
 var isURLSameOrigin = __webpack_require__(29);
-var createError = __webpack_require__(9);
+var createError = __webpack_require__(10);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(30);
 
 module.exports = function xhrAdapter(config) {
@@ -13921,7 +14016,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13946,7 +14041,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13958,7 +14053,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13984,7 +14079,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24950,106 +25045,11 @@ module.exports = Vue;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(39).setImmediate))
 
 /***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-if (!window.Vue) {
-  window.Vue = __webpack_require__(12);
-}
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-  get: function get(endpoint, params) {
-    var _this = this;
-
-    return axios.get(endpoint, { params: params }).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this.handleError(error);
-    });
-  },
-  post: function post(endpoint, params, options) {
-    var _this2 = this;
-
-    if (options && options.header) {
-      options.header['X-CSRF-TOKEN'] = standardOptions.header['X-CSRF-TOKEN'];
-    } else {
-      options = standardOptions;
-    }
-    return window.Vue.http.post(endpoint, params, options).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this2.handleError(error);
-    });
-  },
-  put: function put(endpoint, params) {
-    var _this3 = this;
-
-    return window.Vue.http.put(endpoint, params, standardOptions).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this3.handleError(error);
-    });
-  },
-  patch: function patch(endpoint, params) {
-    var _this4 = this;
-
-    return window.Vue.http.patch(endpoint, params, standardOptions).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this4.handleError(error);
-    });
-  },
-  delete: function _delete(endpoint, params) {
-    var _this5 = this;
-
-    var options;
-    if (params) {
-      options = {
-        params: params,
-        headers: { 'X-CSRF-TOKEN': standardOptions.headers['X-CSRF-TOKEN'] }
-      };
-    } else {
-      options = standardOptions;
-    }
-    return window.Vue.http.delete(endpoint, options).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this5.handleError(error);
-    });
-  },
-  handleError: function handleError(error) {
-    var message;
-    switch (error.status) {
-      case 500:
-        message = ['500 ERROR: Please contact support.'];
-        break;
-      case 404:
-        message = ['The requested data was not found.'];
-        break;
-      case 400:
-        message = error.body;
-        break;
-      case 422:
-        message = error.body;
-        break;
-      default:
-        message = error.body;
-    }
-    return {
-      error: true,
-      code: error.status,
-      message: message
-    };
-  }
-});
-
-/***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(15);
-module.exports = __webpack_require__(52);
+module.exports = __webpack_require__(56);
 
 
 /***/ }),
@@ -25065,7 +25065,7 @@ module.exports = __webpack_require__(52);
 
 __webpack_require__(16);
 
-window.Vue = __webpack_require__(12);
+window.Vue = __webpack_require__(13);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -25076,6 +25076,7 @@ window.Vue = __webpack_require__(12);
 Vue.component('example-component', __webpack_require__(41));
 Vue.component('tournament-index', __webpack_require__(44));
 Vue.component('game-index', __webpack_require__(48));
+Vue.component('player-index', __webpack_require__(52));
 
 var app = new Vue({
   el: '#app'
@@ -25087,7 +25088,7 @@ var app = new Vue({
 
 
 window._ = __webpack_require__(17);
-window.Popper = __webpack_require__(4).default;
+window.Popper = __webpack_require__(5).default;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -25096,7 +25097,7 @@ window.Popper = __webpack_require__(4).default;
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(5);
+  window.$ = window.jQuery = __webpack_require__(6);
 
   __webpack_require__(19);
 } catch (e) {}
@@ -42295,7 +42296,7 @@ module.exports = function(module) {
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(5), __webpack_require__(4)) :
+   true ? factory(exports, __webpack_require__(6), __webpack_require__(5)) :
   typeof define === 'function' && define.amd ? define(['exports', 'jquery', 'popper.js'], factory) :
   (factory((global.bootstrap = {}),global.jQuery,global.Popper));
 }(this, (function (exports,$,Popper) { 'use strict';
@@ -46249,9 +46250,9 @@ module.exports = __webpack_require__(21);
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(6);
+var bind = __webpack_require__(7);
 var Axios = __webpack_require__(23);
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 
 /**
  * Create an instance of Axios
@@ -46284,9 +46285,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(11);
+axios.Cancel = __webpack_require__(12);
 axios.CancelToken = __webpack_require__(37);
-axios.isCancel = __webpack_require__(10);
+axios.isCancel = __webpack_require__(11);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -46334,7 +46335,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(32);
 var dispatchRequest = __webpack_require__(33);
@@ -46439,7 +46440,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(9);
+var createError = __webpack_require__(10);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -46872,8 +46873,8 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(34);
-var isCancel = __webpack_require__(10);
-var defaults = __webpack_require__(2);
+var isCancel = __webpack_require__(11);
+var defaults = __webpack_require__(3);
 var isAbsoluteURL = __webpack_require__(35);
 var combineURLs = __webpack_require__(36);
 
@@ -47032,7 +47033,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(11);
+var Cancel = __webpack_require__(12);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -47384,14 +47385,14 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(8)))
 
 /***/ }),
 /* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(42)
 /* template */
@@ -47510,7 +47511,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(45)
 /* template */
@@ -47684,7 +47685,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(4);
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -48305,7 +48306,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(49)
 /* template */
@@ -48458,7 +48459,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(4);
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -48858,6 +48859,715 @@ if (false) {
 
 /***/ }),
 /* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(53)
+/* template */
+var __vue_template__ = __webpack_require__(55)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/player/PlayerIndex.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-172420fa", Component.options)
+  } else {
+    hotAPI.reload("data-v-172420fa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_player_js__ = __webpack_require__(54);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      players: [],
+      indexRequest: {
+        order: 'DESC',
+        column: 'player.id',
+        per_page: 10,
+        search_term: '',
+        page: 1
+      },
+      reverseSort: true
+    };
+  },
+  mounted: function mounted() {
+    console.log('Component mounted.');
+    this.loadplayers();
+  },
+  methods: {
+    loadplayers: function loadplayers() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_0__resources_player_js__["a" /* default */].index().then(function (response) {
+        if (response.error) {
+          console.log('error');
+        }
+        _this.players = response.data;
+        console.log(response);
+      });
+    },
+    sortColumn: function sortColumn(column) {
+      if (this.indexRequest.column == column) {
+        this.reverseSort = !this.reverseSort;
+      } else {
+        this.indexRequest.column = column;
+      }
+    }
+  }
+});
+
+/***/ }),
+/* 54 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(4);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  index: function index(params) {
+    return __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__["a" /* default */].get('/api/players', params);
+  }
+});
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-8" }, [
+        _c("div", { staticClass: "card card-default" }, [
+          _c("div", { staticClass: "card-header" }, [_vm._v("player Index")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "table",
+              [
+                _c("thead", [
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("player.id")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("ID\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.indexRequest.column == "player.id",
+                              expression: "indexRequest.column == 'player.id'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("player.f_name")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("First Name\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.indexRequest.column == "player.f_name",
+                              expression:
+                                "indexRequest.column == 'player.f_name'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("player.l_name")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("Last Name\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.indexRequest.column == "player.l_name",
+                              expression:
+                                "indexRequest.column == 'player.l_name'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("player.phone")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("Phone\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.indexRequest.column == "player.phone",
+                              expression:
+                                "indexRequest.column == 'player.phone'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("player.email")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("Email\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.indexRequest.column == "player.email",
+                              expression:
+                                "indexRequest.column == 'player.email'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("player.created_at.date")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("Created At\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.indexRequest.column ==
+                                "player.created_at.date",
+                              expression:
+                                "indexRequest.column == 'player.created_at.date'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.sortColumn("player.updated_at.date")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("Updated At\n                            "),
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.indexRequest.column ==
+                                "player.updated_at.date",
+                              expression:
+                                "indexRequest.column == 'player.updated_at.date'"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.reverseSort,
+                                  expression: "reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-up"
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.reverseSort,
+                                  expression: "!reverseSort"
+                                }
+                              ]
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-arrow-down"
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.players, function(player) {
+                  return _c("tr", [
+                    _c("td", [_vm._v(_vm._s(player.id))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(player.f_name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(player.l_name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(player.phone))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(player.email))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(player.created_at.date))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(player.updated_at.date))])
+                  ])
+                })
+              ],
+              2
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-172420fa", module.exports)
+  }
+}
+
+/***/ }),
+/* 56 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
