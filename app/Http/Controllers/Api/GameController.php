@@ -16,18 +16,18 @@ class GameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $r)
+    public function index(Request $request)
     {
         //Validate get request
-        $v = Validator::make($r->all(), [
+        $validate = Validator::make($request->all(), [
             'perPage' => 'required_with:page|integer',
             'page' => 'sometimes|integer',
         ]);
-        if ($v->fails())
-            return $this->errors($v);
+        if ($validate->fails())
+            return $this->errors($validate);
         
         //Return a list of games with pagination (default 10)
-        return new Games (Game::paginate(isset($r->perPage)?$r->perPage:10));
+        return new Games (Game::paginate(isset($request->perPage)?$request->perPage:10));
     }
 
     /**
@@ -50,9 +50,9 @@ class GameController extends Controller
     public function show($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:games']);
-        if ($v->fails())
-            return $this->errors($v);
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:games']);
+        if ($validate->fails())
+            return $this->errors($validate);
     }
 
     /**
@@ -76,8 +76,8 @@ class GameController extends Controller
     public function destroy($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:games']);
-        if ($v->fails())
-            return $this->errors($v);
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:games']);
+        if ($validate->fails())
+            return $this->errors($validate);
     }
 }

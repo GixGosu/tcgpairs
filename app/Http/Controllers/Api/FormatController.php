@@ -16,21 +16,21 @@ class FormatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $r)
+    public function index(Request $request)
     {
         //Validate get request
-        $v = Validator::make($r->all(), [
+        $validate = Validator::make($request->all(), [
             'gameId' => 'required|exists:games,id',
             'perPage' => 'required_with:page|integer',
             'page' => 'sometimes|integer',
         ]);
-        if ($v->fails())
-            return $this->errors($v);
+        if ($validate->fails())
+            return $this->errors($validate);
         
-        if (isset($r->perPage)) {
-            return new Formats (Format::where('game_id', $r->gameId)->paginate($r->perPage));
+        if (isset($request->perPage)) {
+            return new Formats (Format::where('game_id', $request->gameId)->paginate($request->perPage));
         } else {
-            return new Formats (Format::where('game_id', $r->gameId)->get());
+            return new Formats (Format::where('game_id', $request->gameId)->get());
         }
     }
 
@@ -54,9 +54,9 @@ class FormatController extends Controller
     public function show($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:formats']);
-        if ($v->fails())
-            return $this->errors($v);
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:formats']);
+        if ($validate->fails())
+            return $this->errors($validate);
     }
 
     /**
@@ -80,8 +80,8 @@ class FormatController extends Controller
     public function destroy($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:formats']);
-        if ($v->fails())
-            return $this->errors($v);
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:formats']);
+        if ($validate->fails())
+            return $this->errors($validate);
     }
 }

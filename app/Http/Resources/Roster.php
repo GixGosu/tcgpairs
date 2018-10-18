@@ -18,6 +18,13 @@ class Roster extends BaseResource
             'active' => $this->active,
             'playerId' => $this->player_id,
             'playerName' => $this->player->l_f_name,
+            'teamName' => $this->team->team_name,
+            'wins' => $this->team->wins,
+            'losses' => $this->team->losses,
+            'draws' => $this->team->draws,
+            'byes' => $this->team->byes,
+            'active' => $this->active,
+            'teamActive' => $this->team->active,
         ];
     }
 

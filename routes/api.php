@@ -55,7 +55,7 @@ Route::post('tournaments/{tournamentId}/rounds', 'Api\\RoundController@create');
     //Required: url(tournamentId)
 
 //Get a rounds list of matches
-Route::get('rounds/{id}', 'Api\\RoundController@show');
+Route::get('rounds/{id}/matches', 'Api\\RoundController@matches');
     //Required: url(id)
 
 //Delete a round
@@ -71,9 +71,25 @@ Route::post('rounds/{id}/pair', 'Api\\RoundController@pair');
 /***********************
  * Roster/Team routing *
  ***********************/
+//Register a new team / player for a tournament
+Route::post('tournaments/{tournamentId}/roster', 'Api\\RosterController@register');
+    //Required: url(tournamentId), players[*]['id']
+    //Optional: teamName, players[*]['slot']
+
+//List player roster
+Route::get('tournaments/{tournamentId}/roster', 'Api\\RosterController@index');
+    //Required: url(tournamentId)
+    //Optional: perPage, page
+
+//Delete a player from a tournament (does not delete team)
+Route::delete('rosters/{id}', 'Api\\RosterController@destroy');
+    //Required: url(id)
+
+//Delete a team from a tournament (deletes both team and associated players)
+Route::delete('teams/{id}', 'Api\\RosterController@destroyTeam');
+    //Required: url(id)
 
 Route::resources([
     'games' => 'Api\\GameController',
     'formats' => 'Api\\FormatController',
-    'roster' => 'Api\\RosterController',
 ]);

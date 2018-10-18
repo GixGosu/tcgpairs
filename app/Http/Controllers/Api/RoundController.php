@@ -20,11 +20,11 @@ class RoundController extends Controller
     public function index($tournamentId)
     {
         //Validate $tournamentId
-        $v = Validator::make(['tournamentId' => $tournamentId],[
+        $validate = Validator::make(['tournamentId' => $tournamentId],[
             'tournamentId' => 'required|exists:tournaments,id',
         ]);
-        if ($v->fails())
-            return $this->errors($v);
+        if ($validate->fails())
+            return $this->errors($validate);
 
         return (new Rounds (Tournament::findOrFail($tournamentId)->rounds))
         ->response()
@@ -40,16 +40,16 @@ class RoundController extends Controller
     public function create($tournamentId)
     {
         //Validate $tournamentId variable
-        $v = Validator::make(['tournamentId' => $tournamentId], [
+        $validate = Validator::make(['tournamentId' => $tournamentId], [
             'tournamentId' => 'required|exists:tournaments,id',
         ]);
-        if ($v->fails())
-            return $this->errors($v);
+        if ($validate->fails())
+            return $this->errors($validate);
 
         $round = Tournament::find($tournamentId)->createRound();
         if (!$round){
-            $v->errors()->add('id', 'Blank round already created');
-            return $this->errors($v, 500);
+            $validate->errors()->add('id', 'Blank round already created');
+            return $this->errors($validate, 500);
         }
         
         return (new RoundResource($round))
@@ -66,9 +66,9 @@ class RoundController extends Controller
     public function show($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:rounds']);
-        if ($v->fails())
-            return $this->errors($v);
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:rounds']);
+        if ($validate->fails())
+            return $this->errors($validate);
 
         return (new RoundResource (Round::findOrFail($id)))
             ->response()
@@ -82,7 +82,7 @@ class RoundController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $r, $id)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -96,9 +96,9 @@ class RoundController extends Controller
     public function destroy($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:rounds']);
-        if ($v->fails())
-            return $this->errors($v);
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:rounds']);
+        if ($validate->fails())
+            return $this->errors($validate);
 
         $round = Round::destroy($id);
 
@@ -117,17 +117,35 @@ class RoundController extends Controller
       */
       public function pair ($id) {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:rounds']);
-        if ($v->fails())
-            return $this->errors($v);
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:rounds']);
+        if ($validate->fails())
+            return $this->errors($validate);
 
-        $round = Round::find($id);
+        $round = Round::findOrFail($id);
         if ($round->createMatches())
             return new Matches ($round->matches);
         else {
-            $v->errors()->add('id', 'Error in pairing round, contact developer');
-            return response()->json($this->errors($v))->setStatusCode(400);
+            $validate->errors()->add('id', 'Error in pairing round, contact developer');
+            return $this->errors($validate, 500);
         }
 
       }
-}
+
+      /**
+       * Show matches for specified round.
+       * 
+       * @param int $id
+       * @return \App\Http\Responses\Collections\Matches
+       */
+        public function matches ($id) {
+            $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:rounds']);
+            if ($validate->fails())
+                return $this->errors($validate);
+
+            $round = Round::findOrFail($id);
+            if (!empty($round->matches))
+                return (new Matches($round->matches))->response()->setStatusCode(200);
+            else
+                return $this->customErrors('Round has not been paired.');
+        }
+    }

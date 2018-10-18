@@ -36,9 +36,9 @@ class MatchController extends Controller
     public function show($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:matches']);
-        if ($v->fails())
-            return $this->errors($v);
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:matches']);
+        if ($validate->fails())
+            return $this->errors($validate);
     }
 
     /**
@@ -62,8 +62,8 @@ class MatchController extends Controller
     public function destroy($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:matches']);
-        if ($v->fails())
-            return $this->errors($v);
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:matches']);
+        if ($validate->fails())
+            return $this->errors($validate);
     }
 }

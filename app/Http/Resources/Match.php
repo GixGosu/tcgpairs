@@ -22,16 +22,16 @@ class Match extends BaseResource
                     'player_id' => $seat->player_id,
                 ];
             }),
-
-            'relationships' => [
-                'tournament' => $this->tournament,
-                'round' => $this->round,
-            ],
         ];
     }
 
     public function with($request) 
     {
-        return parent::with($request)
+        return array_merge(parent::with($request), [
+            'relationships' => [
+                'tournament' => $this->tournament,
+                'round' => $this->round,
+            ]
+        ]);
     }
 }

@@ -16,19 +16,19 @@ class TournamentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $r)
+    public function index(Request $request)
     {
         //Validate get request
-        $v = Validator::make($r->all(), [
+        $validate = Validator::make($request->all(), [
             'perPage' => 'required_with:page|integer',
             'page' => 'sometimes|integer',
         ]);
-        if ($v->fails())
-            return $this->errors($v);
+        if ($validate->fails())
+            return $this->errors($validate);
 
         //Get the 10 most recent tournaments
         return (new Tournaments (Tournament::orderBy('event_time', 'desc')
-            ->paginate(isset($r->perPage)?$r->perPage:10)))
+            ->paginate(isset($request->perPage)?$request->perPage:10)))
             ->response()
             ->setStatusCode(200);
     }
@@ -38,25 +38,25 @@ class TournamentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $r)
+    public function create(Request $request)
     {
         //Validate post request
-        $v = Validator::make($r->all(), [
+        $validate = Validator::make($request->all(), [
             'title' => 'required|string',
             'eventTime' => 'date',
             'gameId' => 'required|exists:games,id',
             'formatId' => 'required|exists:formats,id',
         ]);
 
-        if ($v->fails()) 
-            return $this->errors($v);
+        if ($validate->fails()) 
+            return $this->errors($validate);
 
         //Create a new tournament and return it's information
         $tournament = new Tournament ();
-        $tournament->title = $r->title;
-        $tournament->event_time = isset($r->eventTime)?$r->eventTime:now();
-        $tournament->game_id = $r->gameId;
-        $tournament->format_id = $r->formatId;
+        $tournament->title = $request->title;
+        $tournament->event_time = isset($request->eventTime)?$request->eventTime:now();
+        $tournament->game_id = $request->gameId;
+        $tournament->format_id = $request->formatId;
         $tournament->save();
 
         return (new TournamentResource($tournament))
@@ -70,10 +70,10 @@ class TournamentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $r)
+    public function update(Request $request)
     {
         //Validate put request
-        $v = Validator::make($r->all(), [
+        $validate = Validator::make($request->all(), [
             'id' => 'required|exists:tournaments,id',
             'title' => 'sometimes|string',
             'eventTime' => 'sometimes|date',
@@ -81,22 +81,22 @@ class TournamentController extends Controller
             'formatId' => 'exists:formats,id',
         ]);
 
-        if ($v->fails()) 
-            return $this->errors($v);
+        if ($validate->fails()) 
+            return $this->errors($validate);
 
         //Update an existing tournament and return it's information
-        $tournament = Tournament::findOrFail($r->id);
-        if (isset($r->title))
-            $tournament->title = $r->title;
+        $tournament = Tournament::findOrFail($request->id);
+        if (isset($request->title))
+            $tournament->title = $request->title;
 
-        if (isset($r->eventTime))
-            $tournament->event_time = $r->eventTime;
+        if (isset($request->eventTime))
+            $tournament->event_time = $request->eventTime;
 
-        if (isset($r->gameId))
-            $tournament->game_id = $r->gameId;
+        if (isset($request->gameId))
+            $tournament->game_id = $request->gameId;
 
-        if (isset($r->formatId))
-            $tournament->format_id = $r->formatId;
+        if (isset($request->formatId))
+            $tournament->format_id = $request->formatId;
             
         $tournament->save();
 
@@ -114,9 +114,9 @@ class TournamentController extends Controller
     public function show($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:tournaments']);
-        if ($v->fails())
-            return $this->errors($v);
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:tournaments']);
+        if ($validate->fails())
+            return $this->errors($validate);
             
         $tournament = Tournament::findOrFail($id);
 
@@ -132,9 +132,9 @@ class TournamentController extends Controller
     public function destroy($id)
     {
         //Validate $id
-        $v = Validator::make(['id' => $id], ['id' => 'required|integer|exists:tournaments']);
-        if ($v->fails())
-            return $this->errors($v);
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:tournaments']);
+        if ($validate->fails())
+            return $this->errors($validate);
 
         $tournament = Tournament::findOrFail($id)->delete();
 

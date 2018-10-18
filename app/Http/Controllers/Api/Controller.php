@@ -17,4 +17,14 @@ class Controller extends BaseController
             ])
             ->setStatusCode($code);
     }
+
+    public function customErrors($message, $code = 409) {
+        return response()
+            ->json([
+                'success' => false,
+                'errors' => array_merge([],$message),
+                'data' => [],
+            ])
+            ->setStatusCode($code);
+    }
 }
