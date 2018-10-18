@@ -92,4 +92,5 @@ Route::delete('teams/{id}', 'Api\\RosterController@destroyTeam');
 Route::resources([
     'games' => 'Api\\GameController',
     'formats' => 'Api\\FormatController',
+    'player' => 'Api\\PlayerController'
 ]);

@@ -16,6 +16,9 @@ window.Vue = require('vue');
  */
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('tournament-index', require('./components/tournament/TournamentIndex.vue'));
+Vue.component('game-index', require('./components/game/GameIndex.vue'));
+Vue.component('player-index', require('./components/player/PlayerIndex.vue'));
 
 const app = new Vue({
     el: '#app'

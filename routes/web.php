@@ -14,3 +14,15 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/tournament/index', function () {
+    return view('tournament.index');
+});
+
+Route::get('/game/index', function () {
+    return view('game.index');
+});
+
+Route::get('/player/index', function () {
+    return view('player.index');
+});
