@@ -17,6 +17,10 @@ class Team extends Model
     public function players() {
         return $this->hasMany('App\Models\Roster');
     }
+
+    public function tournament() {
+        return $this->belongsTo('App\Models\Tournament');
+    }
     
     public function scopeAvailable($query) {
         return $query->where('active', true)->sortByDesc('draws')->sortByDesc('wins');

@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use Validator;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 use App\Models\Game;
 use App\Http\Resources\Game as GameResource;
-use App\Http\Resources\Games;
+use App\Http\Resources\Collections\Games;
 
 class GameController extends Controller
 {
@@ -17,27 +16,18 @@ class GameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $r)
+    public function index(Request $request)
     {
         //Validate get request
-        $v = Validator::make($r->all(), [
-            'limit' => 'integer',
-            'offset' => 'integer',
+        $validate = Validator::make($request->all(), [
+            'perPage' => 'required_with:page|integer',
+            'page' => 'sometimes|integer',
         ]);
-        if ($v->fails()) {
-            $errs = $v->errors();
-            $response = [
-                'success' => false,
-                'errors' => $errs->all(),
-                'data' => [],
-            ];
-            return response()
-                ->json($response)
-                ->setStatusCode(400);
-        }
-        $limit = isset($r->limit)?$r->limit:10;
-
-        return new Games (Game::all());
+        if ($validate->fails())
+            return $this->errors($validate);
+        
+        //Return a list of games with pagination (default 10)
+        return new Games (Game::paginate(isset($request->perPage)?$request->perPage:10));
     }
 
     /**
@@ -59,7 +49,10 @@ class GameController extends Controller
      */
     public function show($id)
     {
-        //
+        //Validate $id
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:games']);
+        if ($validate->fails())
+            return $this->errors($validate);
     }
 
     /**
@@ -82,6 +75,9 @@ class GameController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //Validate $id
+        $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:games']);
+        if ($validate->fails())
+            return $this->errors($validate);
     }
 }

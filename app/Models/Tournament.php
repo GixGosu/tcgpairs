@@ -34,12 +34,16 @@ class Tournament extends Model
         return $this->belongsTo('App\Models\Game');
     }
 
+    public function teams () {
+        return $this->hasMany('App\Models\Team');
+    }
+
     public function roster () {
         return $this->hasMany('App\Models\Roster');
     }
 
     public function createRound () {
-        if (!empty($this->rounds->last()) && !$this->rounds->last()->paired)
+        if (!empty($this->rounds->last()) && !$this->rounds->last()->reported)
             return false;
         
         $round = new Round;

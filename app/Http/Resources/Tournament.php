@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Collections\Rounds;
 
-class Tournament extends JsonResource
+class Tournament extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -19,24 +19,25 @@ class Tournament extends JsonResource
             'id' => $this->id,
             'done' => $this->done,
             'title' => $this->title,
-            'event_time' => $this->event_time,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'relationships' => [
-                'game' => $this->game,
-                'format' => $this->format,
-                'rounds' => $this->when(!empty($this->rounds), new Rounds ($this->rounds)),
-                'teams' => $this->teams,
-                'roster' => $this->roster,
-            ]
+            'game' => $this->game->title,
+            'gameId' => $this->game_id,
+            'format' => $this->format->title,
+            'formatId' => $this->format_id,
+            'eventTime' => $this->event_time,
+            'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at,
         ];
     }
 
-    public function with($request) 
-    {
-        return [
-            'success' => true,
-            'errors' => [],
-        ];
+    public function with ($request) {
+        return array_merge(parent::with($request), [
+            'relationships' => [
+                'game' => $this->game,
+                'format' => $this->format,
+                'roster' => Roster::collection($this->roster),
+                'rounds' => Round::collection($this->rounds),
+                'teams' => Team::collection($this->teams),
+            ],
+        ]);
     }
 }

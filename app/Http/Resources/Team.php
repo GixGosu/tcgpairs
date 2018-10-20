@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources;
 
-class Round extends BaseResource
+use App\Models\Team as TeamModel;
+
+class Team extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -14,10 +16,12 @@ class Round extends BaseResource
     {
         return [
             'id' => $this->id,
-            'paired' => $this->paired,
-            'sequenced' => $this->sequenced,
-            'tournament' => $this->tournament->title,
-            'tournamentId' => $this->tournament_id,
+            'active' => $this->active,
+            'teamName' => $this->team_name,
+            'wins' => $this->wins,
+            'draws' => $this->draws,
+            'losses' => $this->losses,
+            'byes' => $this->byes,
         ];
     }
 
@@ -25,7 +29,7 @@ class Round extends BaseResource
     {
         return array_merge(parent::with($request),[
             'relationships' => [
-                'matches' => $this->matches,
+                'players' => Roster::collection($this->players),
             ],
         ]);
     }

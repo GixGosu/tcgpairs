@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class Game extends JsonResource
+class Game extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -24,11 +22,9 @@ class Game extends JsonResource
         ];
     }
 
+
     public function with($request) 
     {
-        return [
-            'success' => true,
-            'errors' => [],
-        ];
+        return parent::with($request)
     }
 }

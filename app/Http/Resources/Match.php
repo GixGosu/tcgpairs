@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class Match extends JsonResource
+class Match extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -24,11 +22,16 @@ class Match extends JsonResource
                     'player_id' => $seat->player_id,
                 ];
             }),
+        ];
+    }
 
+    public function with($request) 
+    {
+        return array_merge(parent::with($request), [
             'relationships' => [
                 'tournament' => $this->tournament,
                 'round' => $this->round,
-            ],
-        ];
+            ]
+        ]);
     }
 }
