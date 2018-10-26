@@ -6,7 +6,7 @@
                     <div class="card-header">Tournament Index</span></div>
 
                     <div class="card-body">
-                        <table>
+                        <table class="table table-striped table-bordered table-hover">
                           <thead>
                             <th @click="sortColumn('tournament.id')">ID
                                 <span v-show="indexRequest.column == 'tournament.id'">
@@ -55,6 +55,9 @@
                                     <span v-show="reverseSort"><i class='glyphicon glyphicon-arrow-up'></i></span>
                                     <span v-show="!reverseSort"><i class='glyphicon glyphicon-arrow-down'></i></span>
                                 </span>
+                            </th>
+                            <th>
+                                <a href="/tournament/create"><span class="glyphicon glyphicon-new-window"></span></a>
                             </th>
                           </thead>
                           <tr v-for="tournament in tournaments">
