@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Validator;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 use App\Models\Tournament;
 use App\Http\Resources\Tournament as TournamentResource;
@@ -48,13 +49,13 @@ class TournamentController extends Controller
             'formatId' => 'required|exists:formats,id',
         ]);
 
-        if ($validate->fails()) 
+        if ($validate->fails())
             return $this->errors($validate);
 
         //Create a new tournament and return it's information
         $tournament = new Tournament ();
         $tournament->title = $request->title;
-        $tournament->event_time = isset($request->eventTime)?$request->eventTime:now();
+        $tournament->event_time = isset($request->eventTime) ? Carbon::parse($request->eventTime) : now();
         $tournament->game_id = $request->gameId;
         $tournament->format_id = $request->formatId;
         $tournament->save();
@@ -81,7 +82,7 @@ class TournamentController extends Controller
             'formatId' => 'exists:formats,id',
         ]);
 
-        if ($validate->fails()) 
+        if ($validate->fails())
             return $this->errors($validate);
 
         //Update an existing tournament and return it's information
@@ -97,7 +98,7 @@ class TournamentController extends Controller
 
         if (isset($request->formatId))
             $tournament->format_id = $request->formatId;
-            
+
         $tournament->save();
 
         return (new TournamentResource($tournament))
@@ -117,7 +118,7 @@ class TournamentController extends Controller
         $validate = Validator::make(['id' => $id], ['id' => 'required|integer|exists:tournaments']);
         if ($validate->fails())
             return $this->errors($validate);
-            
+
         $tournament = Tournament::findOrFail($id);
 
         return new TournamentResource($tournament);
