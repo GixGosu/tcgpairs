@@ -21,6 +21,9 @@ class CreateTournamentsTable extends Migration
             $table->string('title');
             $table->datetime('event_time');
             $table->integer('done')->default(0);
+
+            $table->integer('location_id')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });
