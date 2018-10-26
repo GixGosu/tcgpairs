@@ -11,6 +11,12 @@ use App\Http\Resources\Collections\Tournaments;
 
 class TournamentController extends Controller
 {
+    public function __construct() {
+        parent::__construct();
+        //Defaults
+        $this->sortBy = 'eventTime';
+        $this->sortOrder = 'desc';
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,14 +26,20 @@ class TournamentController extends Controller
     {
         //Validate get request
         $validate = Validator::make($request->all(), [
+            'sortBy' => [Rule::In(['title', 'eventTime', 'createdAt', 'updatedAt'])],
+            'sortOrder' => [Rule::In(['asc', 'desc']),],
             'perPage' => 'required_with:page|integer',
             'page' => 'sometimes|integer',
         ]);
         if ($validate->fails())
             return $this->errors($validate);
 
+        $sortBy = isset($request->sortBy) ? $request->sortBy : $this->sortBy;
+        $sortOrder = isset($request->sortOrder) ? $request->sortOrder : $this->sortOrder;
+        
+
         //Get the 10 most recent tournaments
-        return (new Tournaments (Tournament::orderBy('event_time', 'desc')
+        return (new Tournaments (Tournament::setOrder($sortBy, $sortOrder)
             ->paginate(isset($request->perPage)?$request->perPage:10)))
             ->response()
             ->setStatusCode(200);

@@ -8,6 +8,12 @@ use App\Http\Controllers\Controller as BaseController;
 class Controller extends BaseController
 {
     //
+    public function __construct () {
+        parent::__construct();
+        $this->sortBy = 'createdAt'
+        $this->sortOrder = 'asc';
+    }
+
     public function errors ($v, $code = 400) {
         return response()
             ->json([

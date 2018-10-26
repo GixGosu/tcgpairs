@@ -24,6 +24,7 @@ class CreateRostersTable extends Migration
             //Does the format require certain team members to play others? If so, pair up by slot number
             $table->integer('slot')->default(0);
 
+            $table->integer('order_column');
             $table->timestamps();
             $table->softDeletes();
         });
