@@ -20,6 +20,7 @@ Vue.component('datetime', Datetime);
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('tournament-index', require('./components/tournament/TournamentIndex.vue'));
 Vue.component('tournament-create', require('./components/tournament/TournamentCreate.vue'));
+Vue.component('team-create', require('./components/team/TeamCreate.vue'));
 Vue.component('game-index', require('./components/game/GameIndex.vue'));
 Vue.component('player-index', require('./components/player/PlayerIndex.vue'));
 

@@ -44,10 +44,10 @@
                         </table>
                       </form>
                     </div>
-
                 </div>
             </div>
         </div>
+        <team-create></team-create>
     </div>
 </template>
 

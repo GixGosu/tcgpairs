@@ -377,33 +377,6 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
 /* globals __VUE_SSR_CONTEXT__ */
 
 // IMPORTANT: Do NOT use ES2015 features in this file.
@@ -510,7 +483,130 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
 /* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+if (!window.Vue) {
+  window.Vue = __webpack_require__(13);
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  get: function get(endpoint, params) {
+    var _this = this;
+
+    return axios.get(endpoint, { params: params }).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this.handleError(error);
+    });
+  },
+  post: function post(endpoint, params, options) {
+    var _this2 = this;
+
+    /*if (options && options.header) {
+      options.header['X-CSRF-TOKEN'] = standardOptions.header['X-CSRF-TOKEN']
+    } else {
+      options = standardOptions
+    }*/
+    // return window.Vue.http.post(endpoint, params, options)
+    return axios.post(endpoint, params).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this2.handleError(error);
+    });
+  },
+  put: function put(endpoint, params) {
+    var _this3 = this;
+
+    return window.Vue.http.put(endpoint, params, standardOptions).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this3.handleError(error);
+    });
+  },
+  patch: function patch(endpoint, params) {
+    var _this4 = this;
+
+    return window.Vue.http.patch(endpoint, params, standardOptions).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this4.handleError(error);
+    });
+  },
+  delete: function _delete(endpoint, params) {
+    var _this5 = this;
+
+    var options;
+    if (params) {
+      options = {
+        params: params,
+        headers: { 'X-CSRF-TOKEN': standardOptions.headers['X-CSRF-TOKEN'] }
+      };
+    } else {
+      options = standardOptions;
+    }
+    return window.Vue.http.delete(endpoint, options).then(function (response) {
+      return response.data;
+    }, function (error) {
+      return _this5.handleError(error);
+    });
+  },
+  handleError: function handleError(error) {
+    var message;
+    switch (error.status) {
+      case 500:
+        message = ['500 ERROR: Please contact support.'];
+        break;
+      case 404:
+        message = ['The requested data was not found.'];
+        break;
+      case 400:
+        message = error.body;
+        break;
+      case 422:
+        message = error.body;
+        break;
+      default:
+        message = error.body;
+    }
+    return {
+      error: true,
+      code: error.status,
+      message: message
+    };
+  }
+});
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -612,102 +708,6 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 module.exports = defaults;
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-if (!window.Vue) {
-  window.Vue = __webpack_require__(13);
-}
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-  get: function get(endpoint, params) {
-    var _this = this;
-
-    return axios.get(endpoint, { params: params }).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this.handleError(error);
-    });
-  },
-  post: function post(endpoint, params, options) {
-    var _this2 = this;
-
-    /*if (options && options.header) {
-      options.header['X-CSRF-TOKEN'] = standardOptions.header['X-CSRF-TOKEN']
-    } else {
-      options = standardOptions
-    }*/
-    // return window.Vue.http.post(endpoint, params, options)
-    return axios.post(endpoint, params).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this2.handleError(error);
-    });
-  },
-  put: function put(endpoint, params) {
-    var _this3 = this;
-
-    return window.Vue.http.put(endpoint, params, standardOptions).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this3.handleError(error);
-    });
-  },
-  patch: function patch(endpoint, params) {
-    var _this4 = this;
-
-    return window.Vue.http.patch(endpoint, params, standardOptions).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this4.handleError(error);
-    });
-  },
-  delete: function _delete(endpoint, params) {
-    var _this5 = this;
-
-    var options;
-    if (params) {
-      options = {
-        params: params,
-        headers: { 'X-CSRF-TOKEN': standardOptions.headers['X-CSRF-TOKEN'] }
-      };
-    } else {
-      options = standardOptions;
-    }
-    return window.Vue.http.delete(endpoint, options).then(function (response) {
-      return response.data;
-    }, function (error) {
-      return _this5.handleError(error);
-    });
-  },
-  handleError: function handleError(error) {
-    var message;
-    switch (error.status) {
-      case 500:
-        message = ['500 ERROR: Please contact support.'];
-        break;
-      case 404:
-        message = ['The requested data was not found.'];
-        break;
-      case 400:
-        message = error.body;
-        break;
-      case 422:
-        message = error.body;
-        break;
-      default:
-        message = error.body;
-    }
-    return {
-      error: true,
-      code: error.status,
-      message: message
-    };
-  }
-});
 
 /***/ }),
 /* 5 */
@@ -3248,7 +3248,7 @@ Popper.Defaults = Defaults;
 /* harmony default export */ __webpack_exports__["default"] = (Popper);
 //# sourceMappingURL=popper.js.map
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
 /***/ }),
 /* 6 */
@@ -25043,14 +25043,14 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(40).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(40).setImmediate))
 
 /***/ }),
 /* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(3);
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -25067,7 +25067,7 @@ module.exports = Vue;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(16);
-module.exports = __webpack_require__(70);
+module.exports = __webpack_require__(74);
 
 
 /***/ }),
@@ -25102,8 +25102,9 @@ Vue.component('datetime', __WEBPACK_IMPORTED_MODULE_0_vue_datetime__["Datetime"]
 Vue.component('example-component', __webpack_require__(53));
 Vue.component('tournament-index', __webpack_require__(56));
 Vue.component('tournament-create', __webpack_require__(59));
-Vue.component('game-index', __webpack_require__(62));
-Vue.component('player-index', __webpack_require__(66));
+Vue.component('team-create', __webpack_require__(62));
+Vue.component('game-index', __webpack_require__(66));
+Vue.component('player-index', __webpack_require__(70));
 
 var app = new Vue({
   el: '#app'
@@ -42283,7 +42284,7 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(19)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(19)(module)))
 
 /***/ }),
 /* 19 */
@@ -46279,7 +46280,7 @@ module.exports = __webpack_require__(22);
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(7);
 var Axios = __webpack_require__(24);
-var defaults = __webpack_require__(3);
+var defaults = __webpack_require__(4);
 
 /**
  * Create an instance of Axios
@@ -46362,7 +46363,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(3);
+var defaults = __webpack_require__(4);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(33);
 var dispatchRequest = __webpack_require__(34);
@@ -46901,7 +46902,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(35);
 var isCancel = __webpack_require__(11);
-var defaults = __webpack_require__(3);
+var defaults = __webpack_require__(4);
 var isAbsoluteURL = __webpack_require__(36);
 var combineURLs = __webpack_require__(37);
 
@@ -47219,7 +47220,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 41 */
@@ -47412,7 +47413,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(8)))
 
 /***/ }),
 /* 42 */
@@ -56475,7 +56476,7 @@ module.exports = function (css) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(54)
 /* template */
@@ -56594,7 +56595,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(57)
 /* template */
@@ -57392,7 +57393,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(60)
 /* template */
@@ -57535,13 +57536,368 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("div", { staticClass: "col-md-8" }, [
+          _c("div", { staticClass: "card card-default" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _vm._v("Tournament Create")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c(
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.handleSubmit($event)
+                    }
+                  }
+                },
+                [
+                  _c("table", { staticClass: "table" }, [
+                    _c("tr", [
+                      _c("td", [
+                        _c("label", [
+                          _vm._v(
+                            "\n                          Title:\n                          "
+                          ),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.tournament.title,
+                                expression: "tournament.title"
+                              }
+                            ],
+                            attrs: { type: "text" },
+                            domProps: { value: _vm.tournament.title },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.tournament,
+                                  "title",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("tr", [
+                      _c("td", [
+                        _c("label", [
+                          _vm._v(
+                            "\n                          Game ID:\n                          "
+                          ),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.tournament.gameId,
+                                expression: "tournament.gameId"
+                              }
+                            ],
+                            attrs: { type: "text" },
+                            domProps: { value: _vm.tournament.gameId },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.tournament,
+                                  "gameId",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("tr", [
+                      _c("td", [
+                        _c("label", [
+                          _vm._v(
+                            "\n                          Format ID:\n                          "
+                          ),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.tournament.formatId,
+                                expression: "tournament.formatId"
+                              }
+                            ],
+                            attrs: { type: "text" },
+                            domProps: { value: _vm.tournament.formatId },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.tournament,
+                                  "formatId",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("tr", [
+                      _c("td", [
+                        _c("label", [
+                          _vm._v(
+                            "\n                          Location ID:\n                          "
+                          ),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.tournament.locationId,
+                                expression: "tournament.locationId"
+                              }
+                            ],
+                            attrs: { type: "text" },
+                            domProps: { value: _vm.tournament.locationId },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.tournament,
+                                  "locationId",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("tr", [
+                      _c("td", [
+                        _c(
+                          "label",
+                          [
+                            _vm._v(
+                              "\n                          Event Date and Time:\n                          "
+                            ),
+                            _c("datetime", {
+                              attrs: { type: "datetime" },
+                              model: {
+                                value: _vm.tournament.eventTime,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.tournament, "eventTime", $$v)
+                                },
+                                expression: "tournament.eventTime"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(0)
+                  ])
+                ]
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("team-create")
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("td", [
+        _c("button", { attrs: { type: "submit" } }, [_vm._v("Submit")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-9cdda7f8", module.exports)
+  }
+}
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(63)
+/* template */
+var __vue_template__ = __webpack_require__(65)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/team/TeamCreate.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-c0a20af8", Component.options)
+  } else {
+    hotAPI.reload("data-v-c0a20af8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_team_js__ = __webpack_require__(64);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      team: {
+        teamName: 'Timmys Longshots',
+        tournamentId: 1
+      }
+    };
+  },
+  mounted: function mounted() {},
+  methods: {
+    handleSubmit: function handleSubmit() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_0__resources_team_js__["a" /* default */].create(this.team).then(function (response) {
+        if (response.error) {
+          console.log('error');
+        }
+        _this.tournamentLink = response.data;
+        console.log(response);
+      });
+    }
+  }
+});
+
+/***/ }),
+/* 64 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(3);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  create: function create(params) {
+    return __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__["a" /* default */].post('/api/teams', params);
+  }
+});
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "card card-default" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v("Tournament Create")
-          ]),
+          _c("div", { staticClass: "card-header" }, [_vm._v("Team Create")]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c(
@@ -57560,27 +57916,27 @@ var render = function() {
                     _c("td", [
                       _c("label", [
                         _vm._v(
-                          "\n                          Title:\n                          "
+                          "\n                          Tournament ID (will autofill soon):\n                          "
                         ),
                         _c("input", {
                           directives: [
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.tournament.title,
-                              expression: "tournament.title"
+                              value: _vm.team.tournamentId,
+                              expression: "team.tournamentId"
                             }
                           ],
                           attrs: { type: "text" },
-                          domProps: { value: _vm.tournament.title },
+                          domProps: { value: _vm.team.tournamentId },
                           on: {
                             input: function($event) {
                               if ($event.target.composing) {
                                 return
                               }
                               _vm.$set(
-                                _vm.tournament,
-                                "title",
+                                _vm.team,
+                                "tournamentId",
                                 $event.target.value
                               )
                             }
@@ -57594,125 +57950,33 @@ var render = function() {
                     _c("td", [
                       _c("label", [
                         _vm._v(
-                          "\n                          Game ID:\n                          "
+                          "\n                          Team Name:\n                          "
                         ),
                         _c("input", {
                           directives: [
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.tournament.gameId,
-                              expression: "tournament.gameId"
+                              value: _vm.team.teamName,
+                              expression: "team.teamName"
                             }
                           ],
                           attrs: { type: "text" },
-                          domProps: { value: _vm.tournament.gameId },
+                          domProps: { value: _vm.team.teamName },
                           on: {
                             input: function($event) {
                               if ($event.target.composing) {
                                 return
                               }
                               _vm.$set(
-                                _vm.tournament,
-                                "gameId",
+                                _vm.team,
+                                "teamName",
                                 $event.target.value
                               )
                             }
                           }
                         })
                       ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("label", [
-                        _vm._v(
-                          "\n                          Format ID:\n                          "
-                        ),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.tournament.formatId,
-                              expression: "tournament.formatId"
-                            }
-                          ],
-                          attrs: { type: "text" },
-                          domProps: { value: _vm.tournament.formatId },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.tournament,
-                                "formatId",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        })
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("label", [
-                        _vm._v(
-                          "\n                          Location ID:\n                          "
-                        ),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.tournament.locationId,
-                              expression: "tournament.locationId"
-                            }
-                          ],
-                          attrs: { type: "text" },
-                          domProps: { value: _vm.tournament.locationId },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.tournament,
-                                "locationId",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        })
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c(
-                        "label",
-                        [
-                          _vm._v(
-                            "\n                          Event Date and Time:\n                          "
-                          ),
-                          _c("datetime", {
-                            attrs: { type: "datetime" },
-                            model: {
-                              value: _vm.tournament.eventTime,
-                              callback: function($$v) {
-                                _vm.$set(_vm.tournament, "eventTime", $$v)
-                              },
-                              expression: "tournament.eventTime"
-                            }
-                          })
-                        ],
-                        1
-                      )
                     ])
                   ]),
                   _vm._v(" "),
@@ -57743,20 +58007,20 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-9cdda7f8", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-c0a20af8", module.exports)
   }
 }
 
 /***/ }),
-/* 62 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(63)
+var __vue_script__ = __webpack_require__(67)
 /* template */
-var __vue_template__ = __webpack_require__(65)
+var __vue_template__ = __webpack_require__(69)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -57795,12 +58059,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 63 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_game_js__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_game_js__ = __webpack_require__(68);
 //
 //
 //
@@ -57901,11 +58165,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 64 */
+/* 68 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(3);
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -57915,7 +58179,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 65 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -58304,15 +58568,15 @@ if (false) {
 }
 
 /***/ }),
-/* 66 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(67)
+var __vue_script__ = __webpack_require__(71)
 /* template */
-var __vue_template__ = __webpack_require__(69)
+var __vue_template__ = __webpack_require__(73)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -58351,12 +58615,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 67 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_player_js__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_player_js__ = __webpack_require__(72);
 //
 //
 //
@@ -58471,11 +58735,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 68 */
+/* 72 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__ = __webpack_require__(3);
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -58485,7 +58749,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 69 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -59013,7 +59277,7 @@ if (false) {
 }
 
 /***/ }),
-/* 70 */
+/* 74 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

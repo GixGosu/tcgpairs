@@ -25,7 +25,7 @@ Route::get('tournaments', 'Api\\TournamentController@index');
     //Optional: perPage [10], page
 
 //Create new tournament
-Route::post('tournaments', 'Api\\TournamentController@create');     
+Route::post('tournaments', 'Api\\TournamentController@create');
     //Required: gameId, formatId, title
 
 //Edit a tournament
@@ -67,7 +67,7 @@ Route::post('rounds/{id}/pair', 'Api\\RoundController@pair');
     //Required: url(id)
     //Not implemented (byes)
 
-    
+
 /***********************
  * Roster/Team routing *
  ***********************/
@@ -88,6 +88,10 @@ Route::delete('rosters/{id}', 'Api\\RosterController@destroy');
 //Delete a team from a tournament (deletes both team and associated players)
 Route::delete('teams/{id}', 'Api\\RosterController@destroyTeam');
     //Required: url(id)
+
+//Create a new team
+Route::post('teams', 'Api\\TeamController@create');
+    //Required: teamName, tournamentId
 
 Route::resources([
     'games' => 'Api\\GameController',
