@@ -6,8 +6,9 @@
  */
 
 require('./bootstrap');
-
 window.Vue = require('vue');
+import { Datetime } from 'vue-datetime';
+import 'vue-datetime/dist/vue-datetime.css';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -15,8 +16,10 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('datetime', Datetime);
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('tournament-index', require('./components/tournament/TournamentIndex.vue'));
+Vue.component('tournament-create', require('./components/tournament/TournamentCreate.vue'));
 Vue.component('game-index', require('./components/game/GameIndex.vue'));
 Vue.component('player-index', require('./components/player/PlayerIndex.vue'));
 

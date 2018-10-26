@@ -12,12 +12,13 @@ export default {
         })
   },
   post: function (endpoint, params, options) {
-    if (options && options.header) {
+    /*if (options && options.header) {
       options.header['X-CSRF-TOKEN'] = standardOptions.header['X-CSRF-TOKEN']
     } else {
       options = standardOptions
-    }
-    return window.Vue.http.post(endpoint, params, options)
+    }*/
+    // return window.Vue.http.post(endpoint, params, options)
+    return axios.post(endpoint, params)
         .then((response) => {
           return response.data
         }, (error) => {

@@ -19,6 +19,10 @@ Route::get('/tournament/index', function () {
     return view('tournament.index');
 });
 
+Route::get('/tournament/create', function () {
+    return view('tournament.create');
+});
+
 Route::get('/game/index', function () {
     return view('game.index');
 });
