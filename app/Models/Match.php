@@ -28,4 +28,8 @@ class Match extends Model
     public function tournament () {
         return $this->belongsTo('App\Models\Tournament');
     }
+
+    public function scopeReported ($query) {
+        return $query->where('reported', true);
+    }
 }

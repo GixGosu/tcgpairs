@@ -38,63 +38,23 @@ class Round extends Model
     }
 
     public function createMatches () {
-        $teams = Team::where('tournament_id', $this->tournament_id)->where('active', true)->get()->sortByDesc('draws')->sortByDesc('wins');
-        $unpaired = $teams->pluck('id', 'id')->toArray();
-        $paired = [];
-        $matches = [];
+        $teams = Team::tournament($this->tournament_id)->active()->withPoints()->get()->sortByDesc('points');
+        $numberOfTeams = $this->tournament->format->number_of_teams;
+        $numberOfByes = $teams->count() % $numberOfTeams;
+        $this->unpaired = $teams->pluck('id')->toArray();
 
-        foreach ($teams as $team) {
-            if (!in_array($team->id, $paired)) {
-                $match = [$team->id];
-                //Remove team from $unpaired $id[key==value]
-                $unpaired = array_filter($unpaired, function ($value) use ($team) {
-                    return ($value == $team->id)?false:true;
-                });
-                array_push($paired, $team->id);
-                foreach ($unpaired as $id) {
-                    //Makes sure the teams haven't played each other yet
-                    if (!in_array($id, $paired) && (!isset($team->played) || !in_array($id, $team->played))) {
-                        //Remove team from $unpaired $id[key==value]
-                        $unpaired = array_filter($unpaired, function ($value) use ($id) {
-                            return ($value == $id)?false:true;
-                        });
+        //Pair the full tables first
+        $this->pairMatches($teams, $numberOfTeams, $numberOfByes);
 
-                        array_push($match, $id);
-                        array_push($paired, $id);
-                    }
+        //Pair tables with empty seats / byes
+        $byes = $teams->whereIn('id', $this->unpaired);
+        $this->pairMatches($byes, $numberOfTeams - 1, 0);
 
-                    //If quantity of teams in $match is how many the format requires...
-                    if (count($match) == $this->tournament->format->number_of_teams) {
-                        array_push($matches, $match);
-                        $match = [];
-                        //Break out of foreach loop
-                        break;
-                    }
-                }
-            }
-        }
+        //Save paired matches in database
+        $this->saveMatches();
 
-        //dd([$matches, $paired, $unpaired]);
 
-        //Logic for incomplete matches caused by total teams not being a multiple of formats.number_of_teams
-        if (!empty($match)) {
-            $diff = $this->tournament->format->number_of_teams - count($match);
-            if ($diff == 1) {
-                //Give bye to last match
-                array_push($match, 0);
-                array_push($matches, $match);
-            } elseif ($diff > 1) {
-                //Multiplayer FFA logic
-                //Take the last addition of previous matches until only missing 1 seat
-                for ($current = 1; $current < $diff; $current++) {
-                    array_push($match, array_pop($matches[count($matches)-$current]));
-                    $match = [];
-                }
-            } else {
-                return false;
-            }
-        }
-        $table = 0;
+        /*
         //Actually create the matches in the database
         //Break array down to each match
         foreach ($matches as $ids) {
@@ -131,7 +91,70 @@ class Round extends Model
 
         $this->paired = true;
         $this->save();
-        return true;
+        return true;*/
+    }
+
+    public function pairMatches ($teams, $numberOfTeams, $ignore) {
+        $match = [];
+        $this->pairedMatches = [];
+        while (count($this->unpaired) > $ignore * ($numberOfTeams - 1)) {
+            //Starting a new match
+            if (empty($match)) {
+                //Find first unpaired player and remove them from array
+                $team = $teams->where('id', array_shift($this->unpaired))->first();
+                $played = $team->played();
+                $match = [$team->id];
+            }
+            //Finding opponent for match
+            if (count($match) < $numberOfTeams) {
+                $validOpponents = $teams->whereIn('id', $this->unpaired)->whereNotIn('id', $played)->sortByDesc('points');
+                if (!empty($validOpponents)) {
+                    $opponent = $validOpponents->first();
+                    array_push($match, $opponent->id);
+                    $this->unpaired = array_diff($this->unpaired, [$opponent->id]);
+                    $played = array_merge($opponent->played(), $played);
+                } else {
+                    //No valid opponents, add players back to the end of the unpaired array
+                    array_merge($this->unpaired, $match);
+                    $match = [];
+                    $played = [];
+                }
+            }
+            //Saving match & reseting variables
+            if (count($match) == $numberOfTeams) {
+                array_push($this->pairedMatches, $match);
+                $match = [];
+                $played = [];
+            }
+        }
+    }
+
+    public function saveMatches () {
+        array_walk($this->pairedMatches, function($match, $index) {
+            $insert = [];
+
+            $newMatch = new Match ();
+            $newMatch->tournament_id = $this->tournament_id;
+            $newMatch->round_id = $this->id;
+            $newMatch->table_id = $index + 1;
+            $newMatch->save();
+
+            array_walk($match, function ($value, $key) use ($newMatch) {
+                foreach (Team::find($value)->players as $player) {
+                    array_push($insert, [
+                        'team_id' => $value,
+                        'match_id' => $newMatch->id,
+                        'round_id' => $this->id,
+                        'player_id' => $player->id,
+                        'tournament_id' => $this->tournament_id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            });
+
+            Seat::insert($insert);
+        });
     }
 
 }

@@ -27,4 +27,12 @@ class Seat extends Model
     public function tournament () {
         return $this->belongsTo('App\Models\Tournament');
     }
+
+    public function scopeTeam ($query, $teamId) {
+        return $query->where('team_id', $teamId);
+    }
+
+    public function scopeExclude ($query, $teamId) {
+        return $query->where('team_id', '<>', $teamId);
+    }
 }
