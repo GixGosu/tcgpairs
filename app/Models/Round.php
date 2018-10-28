@@ -45,14 +45,17 @@ class Round extends Model implements Sortable
         $teams = Team::getTournament($this->tournament_id)->active()->withPoints()->get()->sortByDesc('points');
         $numberOfTeams = $this->tournament->format->number_of_teams;
         $numberOfByes = $teams->count() % $numberOfTeams;
-        $this->unpaired = $teams->pluck('id')->toArray();
+        $unpairedTeams = $teams->pluck('id')->toArray();
 
         //Pair the full tables first
-        $paired = $this->pairMatches($teams, $numberOfTeams, $numberOfByes);
+        $response = $this->pairMatches($teams, $numberOfTeams, $numberOfByes, $unpairedTeams);
+        $paired = $response['paired'];
+        $unpairedTeams = $response['unpairedTeams'];
 
         //Pair tables with empty seats / byes
-        $byes = $teams->whereIn('id', $this->unpaired);
-        $paired = array_merge($paired, $this->pairMatches($byes, $numberOfTeams - 1, 0));
+        $byes = $teams->whereIn('id', $unpairedTeams);
+        $response = $this->pairMatches($byes, $numberOfTeams - 1, 0);
+        $paired = array_merge($paired, $response['paired']);
 
         //Save paired matches in database
         $this->saveMatches($paired);
@@ -60,32 +63,32 @@ class Round extends Model implements Sortable
 
     }
 
-    public function pairMatches ($teams, $numberOfTeams, $ignore) {
+    public function pairMatches ($teams, $numberOfTeams, $ignore, $unpairedTeams) {
         $match = [];
         $pairedMatches = [];
-        while (count($this->unpaired) > $ignore * ($numberOfTeams - 1)) {
+        while (count($unpairedTeams) > $ignore * ($numberOfTeams - 1)) {
             //Starting a new match
             if (empty($match)) {
                 //Find first unpaired player and remove them from array
-                $teamId = $this->unpaired[0];
-                $this->unpaired = array_diff($this->unpaired, [$teamId]);
+                $teamId = $unpairedTeams[0];
+                $unpairedTeams = array_diff($unpairedTeams, [$teamId]);
                 $team = $teams->where('id', $teamId)->first();
-                //$team = $teams->where('id', array_shift($this->unpaired))->first();
+                //$team = $teams->where('id', array_shift($unpairedTeams))->first();
 
                 $played = $team->played();
                 $match = [$team->id];
             }
             //Finding opponent for match
             if (count($match) < $numberOfTeams) {
-                $validOpponents = $teams->whereIn('id', $this->unpaired)->whereNotIn('id', $played)->sortByDesc('points');
+                $validOpponents = $teams->whereIn('id', $unpairedTeams)->whereNotIn('id', $played)->sortByDesc('points');
                 if (!empty($validOpponents)) {
                     $opponent = $validOpponents->first();
                     array_push($match, $opponent->id);
-                    $this->unpaired = array_diff($this->unpaired, [$opponent->id]);
+                    $unpairedTeams = array_diff($unpairedTeams, [$opponent->id]);
                     $played = array_merge($opponent->played(), $played);
                 } else {
                     //No valid opponents, add players back to the end of the unpaired array
-                    array_merge($this->unpaired, $match);
+                    array_merge($unpairedTeams, $match);
                     $match = [];
                     $played = [];
                 }
@@ -98,7 +101,10 @@ class Round extends Model implements Sortable
             }
         }
 
-        return $pairedMatches;
+        return [
+            'paired' => $pairedMatches,
+            'unpairedTeams' => $unpairedTeams
+        ];
     }
 
     public function saveMatches ($paired) {
