@@ -137,7 +137,7 @@ class RosterController extends Controller
         Roster::destroy($id);
 
         return response()->setStatusCode(200);
-        
+
     }
 
     /**
@@ -158,6 +158,6 @@ class RosterController extends Controller
         $team->delete();
 
         return response()->setStatusCode(200);
-        
+
     }
 }

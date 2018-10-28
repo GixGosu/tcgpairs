@@ -57495,6 +57495,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -57729,7 +57730,9 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("team-create")
+      _c("team-create"),
+      _vm._v(" "),
+      _c("roster-create")
     ],
     1
   )
@@ -57843,6 +57846,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -57851,7 +57860,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       team: {
         teamName: 'Timmys Longshots',
-        tournamentId: 1
+        tournamentId: 1,
+        players: [{
+          'id': 1
+          //'slot': 1
+        }]
       }
     };
   },
@@ -57860,7 +57873,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     handleSubmit: function handleSubmit() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_0__resources_team_js__["a" /* default */].create(this.team).then(function (response) {
+      __WEBPACK_IMPORTED_MODULE_0__resources_team_js__["a" /* default */].create(this.team, this.team.tournamentId).then(function (response) {
         if (response.error) {
           console.log('error');
         }
@@ -57880,8 +57893,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-  create: function create(params) {
-    return __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__["a" /* default */].post('/api/teams', params);
+  create: function create(params, url) {
+    return __WEBPACK_IMPORTED_MODULE_0__resources_requestHandler_js__["a" /* default */].post('/api/tournaments/' + url + '/roster', params);
   }
 });
 
@@ -57971,6 +57984,40 @@ var render = function() {
                               _vm.$set(
                                 _vm.team,
                                 "teamName",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [
+                      _c("label", [
+                        _vm._v(
+                          "\n                          Player ID:\n                          "
+                        ),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.team.players[0].id,
+                              expression: "team.players[0].id"
+                            }
+                          ],
+                          attrs: { type: "text" },
+                          domProps: { value: _vm.team.players[0].id },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.team.players[0],
+                                "id",
                                 $event.target.value
                               )
                             }

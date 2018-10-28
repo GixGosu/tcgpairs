@@ -48,6 +48,7 @@
             </div>
         </div>
         <team-create></team-create>
+        <roster-create></roster-create>
     </div>
 </template>
 

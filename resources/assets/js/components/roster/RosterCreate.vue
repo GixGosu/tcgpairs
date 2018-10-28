@@ -20,12 +20,6 @@
                             </label>
                           </td></tr>
                           <tr><td>
-                            <label>
-                              Player ID:
-                              <input type="text" v-model="team.players[0].id"/>
-                            </label>
-                          </td></tr>
-                          <tr><td>
                             <button type="submit">Submit</button>
                           </td></tr>
                         </table>
@@ -46,13 +40,7 @@ export default {
     return {
       team: {
         teamName: 'Timmys Longshots',
-        tournamentId: 1,
-        players: [
-            {
-                'id': 1
-                //'slot': 1
-            }
-        ]
+        tournamentId: 1
       }
     }
   },
@@ -60,7 +48,7 @@ export default {
   },
   methods: {
     handleSubmit: function() {
-      Team.create(this.team, this.team.tournamentId).then((response) => {
+      Team.create(this.team).then((response) => {
         if (response.error) {
           console.log('error')
         }
