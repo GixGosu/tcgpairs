@@ -19,7 +19,7 @@ class CreateLocationsTable extends Migration
             $table->integer('longitude');
             $table->integer('latitude');
             
-            $table->integer('order_column');
+            $table->integer('order_column')->nullable();
             $table->timestamps();
         });
     }

@@ -19,7 +19,7 @@ class CreateMatchesTable extends Migration
             $table->integer('round_id')->unsigned();
             $table->integer('tournament_id')->unsigned();
 
-            $table->integer('order_column');
+            $table->integer('order_column')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

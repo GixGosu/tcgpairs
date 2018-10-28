@@ -54,7 +54,7 @@ class Round extends Model implements Sortable
 
         //Pair tables with empty seats / byes
         $byes = $teams->whereIn('id', $unpairedTeams);
-        $response = $this->pairMatches($byes, $numberOfTeams - 1, 0);
+        $response = $this->pairMatches($byes, $numberOfTeams - 1, 0, $unpairedTeams);
         $paired = array_merge($paired, $response['paired']);
 
         //Save paired matches in database
@@ -114,7 +114,7 @@ class Round extends Model implements Sortable
             $newMatch->table_id = $index + 1;
             $newMatch->save();
 
-            array_walk($match, function ($value, $key) use ($newMatch) {
+            array_walk($match, function ($value, $key) use ($newMatch, $insert) {
                 foreach (Team::find($value)->players as $player) {
                     array_push($insert, [
                         'team_id' => $value,
@@ -123,7 +123,7 @@ class Round extends Model implements Sortable
                         'player_id' => $player->id,
                         'tournament_id' => $this->tournament_id,
                         'created_at' => now(),
-                        'updated_at' => now(),
+                        'updated_at' => now()
                     ]);
                 }
             });

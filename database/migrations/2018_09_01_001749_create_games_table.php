@@ -18,7 +18,7 @@ class CreateGamesTable extends Migration
             $table->string('title')->unique();
             $table->string('abbrv')->unique();
             
-            $table->integer('order_column');
+            $table->integer('order_column')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

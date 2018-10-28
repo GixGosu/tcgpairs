@@ -21,7 +21,7 @@ class CreatePlayersTable extends Migration
             $table->integer('phone')->nullable();
             $table->string('email')->nullable();
 
-            $table->integer('order_column');
+            $table->integer('order_column')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
