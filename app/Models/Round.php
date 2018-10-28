@@ -70,10 +70,7 @@ class Round extends Model implements Sortable
             //Starting a new match
             if (empty($match)) {
                 //Find first unpaired player and remove them from array
-                $teamId = $unpairedTeams[0];
-                $unpairedTeams = array_diff($unpairedTeams, [$teamId]);
-                $team = $teams->where('id', $teamId)->first();
-                //$team = $teams->where('id', array_shift($unpairedTeams))->first();
+                $team = $teams->where('id', array_shift($unpairedTeams))->first();
 
                 $played = $team->played();
                 $match = [$team->id];
