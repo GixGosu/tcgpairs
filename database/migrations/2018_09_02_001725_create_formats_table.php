@@ -25,6 +25,7 @@ class CreateFormatsTable extends Migration
             $table->integer('is_draft')->default(0);
             $table->integer('is_ffa')->default(0);
 
+            $table->integer('order_column');
             $table->timestamps();
             $table->softDeletes();
         });

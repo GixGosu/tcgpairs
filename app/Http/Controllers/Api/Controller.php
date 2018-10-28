@@ -35,4 +35,22 @@ class Controller extends BaseController
             ])
             ->setStatusCode($code);
     }
+
+    public function validatePagination () {
+        return [
+            'perPage' => 'required_with:page|integer',
+            'page' => 'sometimes|integer',
+        ];
+    }
+
+    public function validateSorting () {
+        return [
+            'sortBy' => [Rule::In($this->sortable)],
+            'sortOrder' => [Rule::In(['asc', 'desc']),],
+        ];
+    }
+
+    public function validateBoth () {
+        return array_merge($this->validatePagination(), $this->validateSorting());
+    }
 }

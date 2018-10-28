@@ -24,6 +24,7 @@ class CreateTournamentsTable extends Migration
 
             $table->integer('location_id')->nullable();
 
+            $table->integer('order_column');
             $table->timestamps();
             $table->softDeletes();
         });

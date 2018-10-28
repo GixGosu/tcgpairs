@@ -20,6 +20,8 @@ class CreatePlayersTable extends Migration
             $table->string('l_name');
             $table->integer('phone')->nullable();
             $table->string('email')->nullable();
+
+            $table->integer('order_column');
             $table->timestamps();
             $table->softDeletes();
         });

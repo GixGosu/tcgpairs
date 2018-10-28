@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Format;
 use Illuminate\Database\Seeder;
 
 class FormatsTableSeeder extends Seeder
@@ -110,6 +111,15 @@ class FormatsTableSeeder extends Seeder
             ],
         ];
 
-        \DB::table('formats')->insert($insertion);
+        foreach ($insertion as $record) {
+            $format = new Format ();
+            $format->game_id =  $record['game_id'];
+            $format->title = $record['title'];
+            $format->type = $record['type'];
+            $format->is_draft = $record['is_draft'];
+            $format->team_size = $record['team_size'];
+            $format->number_of_teams = $record['number_of_teams'];
+            $format->save();
+        }
     }
 }

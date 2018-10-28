@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Game;
 use Illuminate\Database\Seeder;
 
 class GamesTableSeeder extends Seeder
@@ -27,6 +28,11 @@ class GamesTableSeeder extends Seeder
             ],
         ];
 
-        \DB::table('games')->insert($insertion);
+        foreach ($insertion as $record) {
+            $game = new Game ();
+            $game->title = $record['title'];
+            $game->abbrv = $record['abbrv'];
+            $game->save ();
+        }
     }
 }
