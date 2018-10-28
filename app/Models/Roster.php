@@ -20,6 +20,10 @@ class Roster extends Model implements Sortable
         'active' => 'boolean',
     ];
 
+    public function team () {
+        return belongsTo('App\Models\Team');
+    }
+
     public function player () {
         return $this->belongsTo('App\Models\Player');
     }

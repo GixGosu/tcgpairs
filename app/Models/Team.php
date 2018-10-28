@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\Orderable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -39,7 +40,7 @@ class Team extends Model implements Sortable
         return $query->where('active', true);
     }
 
-    public function scopeTournament($query, $tournamentId) {
+    public function scopeGetTournament($query, $tournamentId) {
         return $query->where('tournament_id', $tournamentId);
     }
 

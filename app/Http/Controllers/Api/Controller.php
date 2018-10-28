@@ -9,8 +9,6 @@ class Controller extends BaseController
 {
     //
     public function __construct () {
-        parent::__construct();
-
         $this->sortable = ['order_column', 'createdAt', 'updatedAt'];
         $this->sortBy = 'order_column';
         $this->sortOrder = 'asc';
