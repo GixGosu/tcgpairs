@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 
 class Controller extends BaseController
 {
     //
+    public function __construct () {
+        $this->sortable = ['order_column', 'createdAt', 'updatedAt'];
+        $this->sortBy = 'order_column';
+        $this->sortOrder = 'asc';
+        $this->perPage = 10;
+    }
+
     public function errors ($v, $code = 400) {
         return response()
             ->json([
