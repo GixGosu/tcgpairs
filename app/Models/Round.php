@@ -48,59 +48,21 @@ class Round extends Model implements Sortable
         $this->unpaired = $teams->pluck('id')->toArray();
 
         //Pair the full tables first
-        $this->pairMatches($teams, $numberOfTeams, $numberOfByes);
+        $paired = $this->pairMatches($teams, $numberOfTeams, $numberOfByes);
 
         //Pair tables with empty seats / byes
         $byes = $teams->whereIn('id', $this->unpaired);
-        $this->pairMatches($byes, $numberOfTeams - 1, 0);
+        $paired = array_merge($paired, $this->pairMatches($byes, $numberOfTeams - 1, 0));
 
         //Save paired matches in database
-        $this->saveMatches();
+        $this->saveMatches($paired);
 
 
-        /*
-        //Actually create the matches in the database
-        //Break array down to each match
-        foreach ($matches as $ids) {
-            $table++;
-            $match = new Match;
-            $match->tournament_id = $this->tournament_id;
-            $match->round_id = $this->id;
-            $match->table_id = $table;
-            $match->save();
-            //Break match down to each team
-            foreach ($ids as $id) {
-                //Break team down to each player
-                if ($id !== 0) {
-                    foreach ($teams->where('id', $id)->first()->players as $player) {
-                        $seat = new Seat ($match);
-                        $seat->team_id = $id;
-                        $seat->player_id = $player->id;
-                        $seat->tournament_id = $this->tournament_id;
-                        $seat->round_id = $this->id;
-                        $seat->match_id = $match->id;
-                        $seat->save();
-                    }
-                } else {
-                    $seat = new Seat ($match);
-                    $seat->team_id = 0;
-                    $seat->player_id = 0;
-                    $seat->tournament_id = $this->tournament_id;
-                    $seat->round_id = $this->id;
-                    $seat->match_id = $match->id;
-                    $seat->save();
-                }
-            }
-        }
-
-        $this->paired = true;
-        $this->save();
-        return true;*/
     }
 
     public function pairMatches ($teams, $numberOfTeams, $ignore) {
         $match = [];
-        $this->pairedMatches = [];
+        $pairedMatches = [];
         while (count($this->unpaired) > $ignore * ($numberOfTeams - 1)) {
             //Starting a new match
             if (empty($match)) {
@@ -109,6 +71,7 @@ class Round extends Model implements Sortable
                 $this->unpaired = array_diff($this->unpaired, [$teamId]);
                 $team = $teams->where('id', $teamId)->first();
                 //$team = $teams->where('id', array_shift($this->unpaired))->first();
+
                 $played = $team->played();
                 $match = [$team->id];
             }
@@ -129,15 +92,17 @@ class Round extends Model implements Sortable
             }
             //Saving match & reseting variables
             if (count($match) == $numberOfTeams) {
-                $this->pairedMatches[] = $match;
+                $pairedMatches[] = $match;
                 $match = [];
                 $played = [];
             }
         }
+
+        return $pairedMatches;
     }
 
-    public function saveMatches () {
-        array_walk($this->pairedMatches, function($match, $index) {
+    public function saveMatches ($paired) {
+        array_walk($paired, function($match, $index) {
             $insert = [];
 
             $newMatch = new Match ();
