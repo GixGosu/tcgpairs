@@ -60,7 +60,7 @@ class Round extends Model implements Sortable
         //Save paired matches in database
         $this->saveMatches($paired);
 
-
+        return true;
     }
 
     public function pairMatches ($teams, $numberOfTeams, $ignore, $unpairedTeams) {
@@ -114,7 +114,7 @@ class Round extends Model implements Sortable
             $newMatch->table_id = $index + 1;
             $newMatch->save();
 
-            array_walk($match, function ($value, $key) use ($newMatch, $insert) {
+            array_walk($match, function ($value, $key) use ($newMatch, &$insert) {
                 foreach (Team::find($value)->players as $player) {
                     array_push($insert, [
                         'team_id' => $value,
