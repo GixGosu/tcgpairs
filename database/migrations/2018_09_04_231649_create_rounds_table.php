@@ -21,6 +21,7 @@ class CreateRoundsTable extends Migration
             $table->integer('reported')->default(0);
             $table->integer('paired')->default(0);
 
+            $table->integer('order_column');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\Orderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Player extends Model
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
+
+class Player extends Model implements Sortable
 {
-    //
-    use SoftDeletes;
+
+    use SortableTrait, SoftDeletes, Orderable;
+
     protected $table = 'players';
     protected $guarded = ['id'];
     protected $dates = [

@@ -26,6 +26,7 @@ class CreateTeamsTable extends Migration
             $table->integer('draws')->default(0);
             $table->integer('losses')->default(0);
 
+            $table->integer('order_column');
             $table->timestamps();
             $table->softDeletes();
         });

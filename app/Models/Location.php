@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\Orderable;
 use Illuminate\Database\Eloquent\Model;
 
-class Location extends Model
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
+
+class Location extends Model implements Sortable
 {
-    //
+
+    use SortableTrait, Orderable;
 
     public function setLatitudeAttribute ($value) {
         $this->attributes['latitude'] = $value * 1000;

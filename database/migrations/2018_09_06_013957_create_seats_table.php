@@ -27,6 +27,7 @@ class CreateSeatsTable extends Migration
 
             $table->json('extendedData')->nullable();
 
+            $table->integer('order_column');
             $table->timestamps();
             $table->softDeletes();
         });

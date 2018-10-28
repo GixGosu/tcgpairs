@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\Orderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Round extends Model
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
+
+class Round extends Model implements Sortable
 {
-    //
-    use SoftDeletes;
+
+    use SortableTrait, SoftDeletes, Orderable;
     protected $table = 'rounds';
     protected $guarded = ['id'];
     protected $touches = ['tournament'];

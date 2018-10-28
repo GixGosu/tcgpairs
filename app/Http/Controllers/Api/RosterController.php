@@ -16,6 +16,9 @@ use App\Http\Resources\Collections\Rosters;
 
 class RosterController extends Controller
 {
+    public function __construct() {
+        parent::__construct();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,16 +27,19 @@ class RosterController extends Controller
     public function index(Request $request, $tournamentId)
     {
         //Validate GET request
-        $validate = Validator::make(array_merge($request->all(),['tournamentId'=>$tournamentId]), [
-            'tournamentId' => 'required|integer|exists:tournaments,id',
-            'perPage' => 'required_with:page|integer',
-            'page' => 'sometimes|integer',
-        ]);
+        $validate = Validator::make( array_merge($request->all(), ['tournamentId'=>$tournamentId]), 
+            array_merge($this->validateBoth(), [
+                'tournamentId' => 'required|integer|exists:tournaments,id',
+            ])
+        );
         if ($validate->fails())
             return $this->errors($validate);
+            
+        $sortBy = isset($request->sortBy) ? $request->sortBy : $this->sortBy;
+        $sortOrder = isset($request->sortOrder) ? $request->sortOrder : $this->sortOrder;
+        $perPage = isset($request->perPage)?$request->perPage: $this->perPage;
 
-        $perPage = isset($request->perPage)?$request->perPage:10;
-        return new Rosters (Roster::where('tournament_id', $request->tournamentId)->paginate($perPage));
+        return new Rosters (Roster::where('tournament_id', $request->tournamentId)->setOrder($sortBy, $sortOrder)->paginate($perPage));
     }
 
     /**
