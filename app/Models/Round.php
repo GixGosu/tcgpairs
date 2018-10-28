@@ -22,9 +22,9 @@ class Round extends Model implements Sortable
     ];
 
     public function __construct () {
-        
+
     }
-    
+
     public function tournament () {
         return $this->belongsTo('App\Models\Tournament');
     }
@@ -32,7 +32,7 @@ class Round extends Model implements Sortable
     public function matches () {
         return $this->hasMany('App\Models\Match');
     }
-    
+
     public function seats () {
         return $this->hasMany('App\Models\Seat');
     }
@@ -42,7 +42,7 @@ class Round extends Model implements Sortable
     }
 
     public function createMatches () {
-        $teams = Team::tournament($this->tournament_id)->active()->withPoints()->get()->sortByDesc('points');
+        $teams = Team::getTournament($this->tournament_id)->active()->withPoints()->get()->sortByDesc('points');
         $numberOfTeams = $this->tournament->format->number_of_teams;
         $numberOfByes = $teams->count() % $numberOfTeams;
         $this->unpaired = $teams->pluck('id')->toArray();
@@ -105,7 +105,10 @@ class Round extends Model implements Sortable
             //Starting a new match
             if (empty($match)) {
                 //Find first unpaired player and remove them from array
-                $team = $teams->where('id', array_shift($this->unpaired))->first();
+                $teamId = $this->unpaired[0];
+                $this->unpaired = array_diff($this->unpaired, [$teamId]);
+                $team = $teams->where('id', $teamId)->first();
+                //$team = $teams->where('id', array_shift($this->unpaired))->first();
                 $played = $team->played();
                 $match = [$team->id];
             }
@@ -126,7 +129,7 @@ class Round extends Model implements Sortable
             }
             //Saving match & reseting variables
             if (count($match) == $numberOfTeams) {
-                array_push($this->pairedMatches, $match);
+                $this->pairedMatches[] = $match;
                 $match = [];
                 $played = [];
             }

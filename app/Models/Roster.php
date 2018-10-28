@@ -21,7 +21,7 @@ class Roster extends Model implements Sortable
     ];
 
     public function team () {
-        return $this->hasOne('App\Models\Team');
+        return $this->belongsTo('App\Models\Team');
     }
 
     public function player () {

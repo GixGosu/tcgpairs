@@ -19,7 +19,7 @@ class Team extends Model implements Sortable
         'active' => 'boolean',
         'played' => 'array',
     ];
-    
+
     public function players() {
         return $this->hasMany('App\Models\Roster');
     }
@@ -27,7 +27,7 @@ class Team extends Model implements Sortable
     public function tournament() {
         return $this->belongsTo('App\Models\Tournament');
     }
-    
+
     public function scopeAvailable($query) {
         return $query->where('active', true)->sortByDesc('draws')->sortByDesc('wins');
     }
@@ -40,7 +40,7 @@ class Team extends Model implements Sortable
         return $query->where('active', true);
     }
 
-    public function scopeTournament($query, $tournamentId) {
+    public function scopeGetTournament($query, $tournamentId) {
         return $query->where('tournament_id', $tournamentId);
     }
 

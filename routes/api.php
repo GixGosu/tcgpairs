@@ -63,7 +63,7 @@ Route::delete('rounds/{id}', 'Api\\RoundController@destroy');
     //Required: url(id)
 
 //Create pairings for a new round
-Route::post('rounds/{id}/pair', 'Api\\RoundController@pair');
+Route::get('rounds/{id}/pair', 'Api\\RoundController@pair');
     //Required: url(id)
     //Not implemented (byes)
 
