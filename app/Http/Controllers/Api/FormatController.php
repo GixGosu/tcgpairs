@@ -11,6 +11,9 @@ use App\Http\Resources\Collections\Formats;
 
 class FormatController extends Controller
 {
+    public function __construct() {
+        parent::__construct();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,19 +22,19 @@ class FormatController extends Controller
     public function index(Request $request)
     {
         //Validate get request
-        $validate = Validator::make($request->all(), [
-            'gameId' => 'required|exists:games,id',
-            'perPage' => 'required_with:page|integer',
-            'page' => 'sometimes|integer',
-        ]);
+        $validate = Validator::make($request->all(), 
+            array_merge($this->validateBoth(), [
+                'gameId' => 'required|exists:games,id',
+            ])
+        );
         if ($validate->fails())
             return $this->errors($validate);
+            
+        $perPage = isset($request->perPage)?$request->perPage: $this->perPage;
+        $sortBy = isset($request->sortBy) ? $request->sortBy : $this->sortBy;
+        $sortOrder = isset($request->sortOrder) ? $request->sortOrder : $this->sortOrder;
         
-        if (isset($request->perPage)) {
-            return new Formats (Format::where('game_id', $request->gameId)->paginate($request->perPage));
-        } else {
-            return new Formats (Format::where('game_id', $request->gameId)->get());
-        }
+        return new Formats (Format::where('game_id', $request->gameId)->setOrder($sortBy, $sortOrder)->paginate($perPage));
     }
 
     /**

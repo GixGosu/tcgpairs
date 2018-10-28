@@ -11,6 +11,9 @@ use App\Http\Resources\Collections\Games;
 
 class GameController extends Controller
 {
+    public function __construct() {
+        parent::__construct();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,15 +22,17 @@ class GameController extends Controller
     public function index(Request $request)
     {
         //Validate get request
-        $validate = Validator::make($request->all(), [
-            'perPage' => 'required_with:page|integer',
-            'page' => 'sometimes|integer',
-        ]);
+        $validate = Validator::make($request->all(), $this->validateBoth());
         if ($validate->fails())
             return $this->errors($validate);
         
+            
+        $perPage = isset($request->perPage)?$request->perPage: $this->perPage;
+        $sortBy = isset($request->sortBy) ? $request->sortBy : $this->sortBy;
+        $sortOrder = isset($request->sortOrder) ? $request->sortOrder : $this->sortOrder;
+        
         //Return a list of games with pagination (default 10)
-        return new Games (Game::paginate(isset($request->perPage)?$request->perPage:10));
+        return new Games (Game::setOrder($sortBy, $sortOrder)->paginate($perPage));
     }
 
     /**

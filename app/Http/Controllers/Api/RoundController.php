@@ -12,6 +12,9 @@ use App\Models\Round;
 
 class RoundController extends Controller
 {
+    public function __construct() {
+        parent::__construct();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,15 +23,22 @@ class RoundController extends Controller
     public function index($tournamentId)
     {
         //Validate $tournamentId
-        $validate = Validator::make(['tournamentId' => $tournamentId],[
-            'tournamentId' => 'required|exists:tournaments,id',
-        ]);
+        $validate = Validator::make(['tournamentId' => $tournamentId],
+            array_merge(
+                $this->validateSorting(), [
+                    'tournamentId' => 'required|exists:tournaments,id',
+                ]
+            )
+        );
         if ($validate->fails())
             return $this->errors($validate);
+        
+        $sortBy = isset($request->sortBy) ? $request->sortBy : $this->sortBy;
+        $sortOrder = isset($request->sortOrder) ? $request->sortOrder : $this->sortOrder;
 
-        return (new Rounds (Tournament::findOrFail($tournamentId)->rounds))
-        ->response()
-        ->setStatusCode(200);
+        return (new Rounds (Round::where('tournament_id', $request->tournamentId)->setOrder($sortBy, $sortOrder)->get()))
+            ->response()
+            ->setStatusCode(200);
     }
 
     /**
